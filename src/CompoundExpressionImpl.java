@@ -5,11 +5,12 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     private List<Expression> mChildren;
 
-    public CompoundExpressionImpl() {
+    protected CompoundExpressionImpl(String representation) {
+        super(representation);
         mChildren = new ArrayList<Expression>();
     }
 
-    public void addSubexpression (Expression subexpression) {
+    public void addSubexpression(Expression subexpression) {
         mChildren.add(subexpression);
     }
 

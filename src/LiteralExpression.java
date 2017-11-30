@@ -3,7 +3,7 @@ public class LiteralExpression extends ExpressionImpl {
     private String mRep;
 
     public LiteralExpression(String representation) {
-        mRep = representation;
+        super(representation);
     }
 
     //!!! should implement

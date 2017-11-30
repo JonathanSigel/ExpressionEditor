@@ -1,10 +1,13 @@
 public class ExpressionImpl implements Expression {
 
     private CompoundExpression mParent;
+    private String mRep;
 
     //!!! Jonathan, do you want this to take a parent? It is a very easy fix, just ask
-    public ExpressionImpl() {
+    //!!! also, note that subclasses do NOT take a string unless specified
+    protected ExpressionImpl(String representation) {
         mParent = null;
+        mRep = representation;
     }
 
     public CompoundExpression getParent() {
