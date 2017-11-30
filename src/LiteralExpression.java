@@ -5,10 +5,4 @@ public class LiteralExpression extends ExpressionImpl {
     public LiteralExpression(String representation) {
         super(representation);
     }
-
-    //!!! should implement
-    @Override
-    public String convertToString (int indentLevel) {
-        return null;
-    }
 }

@@ -5,6 +5,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     private List<Expression> mChildren;
 
+    //!!! NO subclasses take a string as a parameter
     protected CompoundExpressionImpl(String representation) {
         super(representation);
         mChildren = new ArrayList<Expression>();
@@ -24,5 +25,11 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     //!!! to implement
     public void flatten () {
 
+    }
+
+    @Override
+    //!!! to implement
+    public String convertToString (int indentLevel) {
+        return null;
     }
 }
