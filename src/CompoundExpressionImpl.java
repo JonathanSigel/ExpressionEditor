@@ -3,7 +3,7 @@ import java.util.List;
 
 public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression{
 
-    private List<Expression> mChildren;
+    protected List<Expression> mChildren;
 
     //!!! NO subclasses take a string as a parameter
     protected CompoundExpressionImpl(String representation) {
@@ -24,12 +24,22 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     @Override
     //!!! to implement
     public void flatten () {
-
     }
 
     @Override
-    //!!! to implement
     public String convertToString (int indentLevel) {
-        return null;
+        StringBuffer sb = new StringBuffer();
+        indent(sb, indentLevel);
+        sb.append(mRep);
+        for (int i = 0; i < mChildren.size(); i++) {
+            sb.append("/t" + mChildren.get(i).convertToString(indentLevel + 1));
+        }
+        return sb.toString();
+    }
+
+    public static void indent (StringBuffer sb, int indentLevel) {
+        for (int i = 0; i < indentLevel; i++) {
+            sb.append('\t');
+        }
     }
 }

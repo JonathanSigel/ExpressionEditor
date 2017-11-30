@@ -1,7 +1,7 @@
 public class ExpressionImpl implements Expression {
 
-    private CompoundExpression mParent;
-    private String mRep;
+    protected CompoundExpression mParent;
+    protected String mRep;
 
     //!!! Jonathan, do you want this to take a parent? It is a very easy fix, just ask
     //!!! also, note that subclasses do NOT take a string unless specified
@@ -26,11 +26,18 @@ public class ExpressionImpl implements Expression {
 
     ///!!! this should only be overridden by those which extend CompoundExpressionImpl
     public void flatten () {
-
     }
 
-    //!!! should be overridden
     public String convertToString (int indentLevel) {
-        return null;
+        StringBuffer sb = new StringBuffer();
+        indent(sb, indentLevel);
+        sb.append(mRep);
+        return sb.toString();
+    }
+
+    public static void indent (StringBuffer sb, int indentLevel) {
+        for (int i = 0; i < indentLevel; i++) {
+            sb.append('\t');
+        }
     }
 }
