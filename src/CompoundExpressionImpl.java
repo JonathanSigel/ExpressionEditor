@@ -32,7 +32,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         indent(sb, indentLevel);
         sb.append(mRep);
         for (int i = 0; i < mChildren.size(); i++) {
-            sb.append("/t" + mChildren.get(i).convertToString(indentLevel + 1));
+            sb.append("/n" + mChildren.get(i).convertToString(indentLevel + 1));
         }
         return sb.toString();
     }
