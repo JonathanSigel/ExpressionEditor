@@ -18,7 +18,10 @@ public class ExpressionImpl implements Expression {
         mParent = parent;
     }
 
-    ///!!! this should only be overridden by those which extend CompoundExpressionImpl
+    public String getType() {
+        return mRep;
+    }
+
     public Expression deepCopy() {
         return new ExpressionImpl(new String(mRep));
     }

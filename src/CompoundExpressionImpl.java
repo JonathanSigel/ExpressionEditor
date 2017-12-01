@@ -3,17 +3,21 @@ import java.util.List;
 
 public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression{
 
-    protected List<Expression> mChildren;
+    protected List<ExpressionImpl> mChildren;
 
     //!!! NO subclasses take a string as a parameter
     protected CompoundExpressionImpl(String representation) {
         super(representation);
-        mChildren = new ArrayList<Expression>();
+        mChildren = new ArrayList<ExpressionImpl>();
     }
 
     public void addSubexpression(Expression subexpression) {
-        mChildren.add(subexpression);
+        mChildren.add((ExpressionImpl) subexpression);
         subexpression.setParent(this);
+    }
+
+    public List<ExpressionImpl> getSubexpressions() {
+        return mChildren;
     }
 
     @Override
@@ -37,7 +41,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         indent(sb, indentLevel);
         sb.append(mRep);
         for (int i = 0; i < mChildren.size(); i++) {
-            sb.append("/n" + mChildren.get(i).convertToString(indentLevel + 1));
+            sb.append("\n" + mChildren.get(i).convertToString(indentLevel + 1));
         }
         return sb.toString();
     }
