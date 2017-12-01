@@ -1,4 +1,4 @@
-public class AdditiveExpression extends CompoundExpressionImpl {
+public class AdditiveExpression extends OperationExpression {
 
     public AdditiveExpression() {
         super("+");

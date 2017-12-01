@@ -1,6 +1,7 @@
-public class MultiplicativeExpression extends CompoundExpressionImpl {
+public class MultiplicativeExpression extends OperationExpression {
 
     public MultiplicativeExpression() {
         super("·");
     }
+
 }

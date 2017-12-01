@@ -13,17 +13,22 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     public void addSubexpression(Expression subexpression) {
         mChildren.add(subexpression);
+        subexpression.setParent(this);
     }
 
     @Override
-    //!!! to implement
     public Expression deepCopy() {
-        return null;
+        CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
+        for (int i = 0; i < mChildren.size(); i++) {
+            copy.addSubexpression(mChildren.get(i).deepCopy());
+        }
+
+        return copy;
     }
 
     @Override
-    //!!! to implement
-    public void flatten () {
+    public void flatten() {
+        flattenChildren();
     }
 
     @Override
@@ -40,6 +45,12 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     public static void indent (StringBuffer sb, int indentLevel) {
         for (int i = 0; i < indentLevel; i++) {
             sb.append('\t');
+        }
+    }
+
+    protected void flattenChildren() {
+        for (int i = 0; i < mChildren.size(); i++) {
+            mChildren.get(i).flatten();
         }
     }
 }
