@@ -1,11 +1,11 @@
 public class ExpressionTester {
     public static void main(String arg[]) {
-        Expression n1 = new ExpressionImpl("9");
-        Expression n2 = new ExpressionImpl("8");
-        Expression n3 = new ExpressionImpl("4");
-        Expression n4 = new ExpressionImpl("5");
-        Expression n5 = new ExpressionImpl("3");
-        Expression n6 = new ExpressionImpl("2");
+        Expression n1 = new LiteralExpression("9");
+        Expression n2 = new LiteralExpression("8");
+        Expression n3 = new LiteralExpression("4");
+        Expression n4 = new LiteralExpression("5");
+        Expression n5 = new LiteralExpression("3");
+        Expression n6 = new LiteralExpression("2");
 
         CompoundExpression m1 = new MultiplicativeExpression();
         m1.addSubexpression(n1);
@@ -32,5 +32,7 @@ public class ExpressionTester {
 
         a3.flatten();
         System.out.println(a3.convertToString(0));
+
+        Expression copy = a2.deepCopy();
     }
 }

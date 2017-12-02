@@ -3,20 +3,20 @@ import java.util.List;
 
 public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression{
 
-    protected List<ExpressionImpl> mChildren;
+    protected List<Expression> mChildren;
 
     //!!! NO subclasses take a string as a parameter
     protected CompoundExpressionImpl(String representation) {
         super(representation);
-        mChildren = new ArrayList<ExpressionImpl>();
+        mChildren = new ArrayList<Expression>();
     }
 
     public void addSubexpression(Expression subexpression) {
-        mChildren.add((ExpressionImpl) subexpression);
+        mChildren.add(subexpression);
         subexpression.setParent(this);
     }
 
-    public List<ExpressionImpl> getSubexpressions() {
+    public List<Expression> getSubexpressions() {
         return mChildren;
     }
 
