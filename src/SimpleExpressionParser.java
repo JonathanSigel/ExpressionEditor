@@ -6,6 +6,8 @@
  * X := (E) | L
  * L := [0-9]+ | [a-z]
  */
+
+/*
 public class SimpleExpressionParser implements ExpressionParser {
 	/*
 	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
@@ -13,7 +15,7 @@ public class SimpleExpressionParser implements ExpressionParser {
 	 * @param str the string to parse into an expression tree
 	 * @param withJavaFXControls you can just ignore this variable for R1
 	 * @return the Expression object representing the parsed expression tree
-	 */
+
 	public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
 		// Remove spaces -- this simplifies the parsing logic
 		str = str.replaceAll(" ", "");
@@ -76,3 +78,4 @@ public class SimpleExpressionParser implements ExpressionParser {
 		return null;
 	}
 }
+*/

@@ -31,8 +31,23 @@ public class ExpressionTester {
         a3.addSubexpression(a2);
 
         a3.flatten();
-        System.out.println(a3.convertToString(0));
+        //System.out.println(a3.convertToString(0));
 
         Expression copy = a2.deepCopy();
+
+        KiraParser parse1 = new KiraParser();
+
+       try {
+          // Expression parsed1 = parse1.parse("9*8+4+5*(3+2)", false);
+           Expression parsed1 = parse1.parse("6*+8+sj", false);
+           System.out.println(parsed1.convertToString(0));
+           int i = 0;
+       }
+       catch(ExpressionParseException e) {
+           System.out.println((e.getMessage()));
+
+       }
+
+
     }
 }
