@@ -39,7 +39,7 @@ public class ExpressionTester {
 
        try {
           // Expression parsed1 = parse1.parse("9*8+4+5*(3+2)", false);
-           Expression parsed1 = parse1.parse("((5)+(7))", false);
+           Expression parsed1 = parse1.parse("(7+(7*5))+(6*7*9+10+10+10)", false);
            System.out.println(parsed1.convertToString(0));
            int i = 0;
        }

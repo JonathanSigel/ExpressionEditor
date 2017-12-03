@@ -6,76 +6,96 @@
  * X := (E) | L
  * L := [0-9]+ | [a-z]
  */
-
-/*
 public class SimpleExpressionParser implements ExpressionParser {
-	/*
-	 * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
-         * Throws a ExpressionParseException if the specified string cannot be parsed.
-	 * @param str the string to parse into an expression tree
-	 * @param withJavaFXControls you can just ignore this variable for R1
-	 * @return the Expression object representing the parsed expression tree
+    /*
+     * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
+     * Throws a ExpressionParseException if the specified string cannot be parsed.
+     * @param str the string to parse into an expression tree
+     * @param withJavaFXControls you can just ignore this variable for R1
+     * @return the Expression object representing the parsed expression tree
+     */
+    public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
+        // Remove spaces -- this simplifies the parsing logic
+        str = str.replaceAll(" ", "");
+        Expression expression = parseExpression(str);
+        if (expression == null) {
+            // If we couldn't parse the string, then raise an error
+            throw new ExpressionParseException("Cannot parse expression: " + str);
+        }
 
-	public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
-		// Remove spaces -- this simplifies the parsing logic
-		str = str.replaceAll(" ", "");
-		Expression expression = parseExpression(str);
-		if (expression == null) {
-			// If we couldn't parse the string, then raise an error
-			throw new ExpressionParseException("Cannot parse expression: " + str);
+        // Flatten the expression before returning
+        expression.flatten();
+        return expression;
+    }
 
-		// Flatten the expression before returning
-		expression.flatten();
-		return expression;
-	}
-	
-	protected Expression parseExpression (String str) {
-		Expression expression;
-//PARSE E
-		boolean parseE (String str) {
-			if (parseA(str) || parseX(str)) {
-				return true;
-			}
-			return false;
-		}
+    protected Expression parseExpression (String str) {
 
-//PARSE A
-		boolean parseA (String str) {
-			int idxOfPlus = str.indexOf('+');
-			while (inxOfPlus >= 0) {
-				if (parseA(str.substring(0, idxOfPlus)) && parseM(str.substring(idxOfPlus+1))) {
-					return true;
-				}
-				idxOfPlus = str.indexOf('+', idxOfPlus+1)
-			}
+        //+
+        int indexPlus = str.indexOf("+");
+        while (indexPlus > -1) {
+            final String subString1 = str.substring(0, indexPlus);
+            final String subString2 = str.substring(indexPlus + 1, str.length());
+            final Expression subExpression1 = parseExpression(subString1);
 
-			if (parseM(str)) {
-				return true;
-			}
-			return false;
-		}
-//PARSE M
-		boolean parseM (String str) {
-			int idxOfMult = str.indexOf('*');
-			while (inxOfMult >= 0) {
-				if (parseM(str.substring(0, idxOfMult)) && parseM(str.substring(idxOfMult+1))) {
-					return true;
-				}
-				idxOfMult = str.indexOf('*', idxOfPlus+1)
-			}
+            if (subExpression1 != null) {
+                final Expression subExpression2 = parseExpression(subString2);
+                if (subExpression2 != null) {
+                    final CompoundExpression addExpression = new AdditiveExpression();
+                    addExpression.addSubexpression(subExpression1);
+                    addExpression.addSubexpression(subExpression2);
+                    return addExpression;
+                }
+            }
 
-			if (parseX(str)) {
-				return true;
-			}
-			return false;
-		}
+            indexPlus = str.indexOf("+", (indexPlus + 1));
+        }
 
-		boolean parseX (String str)
+        //*
+        int indexTimes = str.indexOf("*");
+        while (indexTimes > -1) {
+            final String subString1 = str.substring(0, indexTimes);
+            final String subString2 = str.substring(indexTimes + 1, str.length());
+            final Expression subExpression1 = parseExpression(subString1);
 
-	}
-		
-		// TODO implement me
-		return null;
-	}
+            if (subExpression1 != null) {
+                final Expression subExpression2 = parseExpression(subString2);
+                if (subExpression2 != null) {
+                    final CompoundExpression multExpression = new MultiplicativeExpression();
+                    multExpression.addSubexpression(subExpression1);
+                    multExpression.addSubexpression(subExpression2);
+                    return multExpression;
+                }
+            }
+            indexTimes = str.indexOf("*", (indexTimes + 1));
+        }
+
+        //()
+        int indexLeftParen = str.indexOf("(");
+        int indexRightParen = str.lastIndexOf(")");
+        if (indexLeftParen == 0) {
+            if (indexRightParen == str.length() - 1) {
+                final String subString = str.substring(indexLeftParen + 1, indexRightParen);
+                final Expression subExpression = parseExpression(subString);
+
+                if (subExpression != null) {
+                    final CompoundExpression parenExpression = new ParentheticalExpression();
+                    parenExpression.addSubexpression(subExpression);
+                    return parenExpression;
+                }
+            }
+        }
+
+        // [0-9]+
+        if (str.matches("[0-9]+")) {
+            return new LiteralExpression(str);
+        }
+
+        // [a-z]
+        if (str.matches("[a-z]")) {
+            return new LiteralExpression(str);
+        }
+
+        return null;
+    }
 }
-*/
+

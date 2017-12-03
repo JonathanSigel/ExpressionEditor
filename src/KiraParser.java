@@ -36,15 +36,17 @@ public class KiraParser implements ExpressionParser {
             final String subString1 = str.substring(0, indexPlus);
             final String subString2 = str.substring(indexPlus + 1, str.length());
             final Expression subExpression1 = parseExpression(subString1);
-            final Expression subExpression2 = parseExpression(subString2);
 
-            if (!(subExpression1 == null || subExpression2 == null)) {
-                final CompoundExpression addExpression = new AdditiveExpression();
-                addExpression.addSubexpression(subExpression1);
-                addExpression.addSubexpression(subExpression2);
-                return addExpression;
+            if (subExpression1 != null) {
+                final Expression subExpression2 = parseExpression(subString2);
+                if (subExpression2 != null) {
+                    final CompoundExpression addExpression = new AdditiveExpression();
+                    addExpression.addSubexpression(subExpression1);
+                    addExpression.addSubexpression(subExpression2);
+                    return addExpression;
+                }
             }
-
+            
             indexPlus = str.indexOf("+", (indexPlus + 1));
         }
 
@@ -54,15 +56,16 @@ public class KiraParser implements ExpressionParser {
             final String subString1 = str.substring(0, indexTimes);
             final String subString2 = str.substring(indexTimes + 1, str.length());
             final Expression subExpression1 = parseExpression(subString1);
-            final Expression subExpression2 = parseExpression(subString2);
 
-            if (!(subExpression1 == null || subExpression2 == null)) {
-                final CompoundExpression multExpression = new MultiplicativeExpression();
-                multExpression.addSubexpression(subExpression1);
-                multExpression.addSubexpression(subExpression2);
-                return multExpression;
+            if (subExpression1 != null) {
+                final Expression subExpression2 = parseExpression(subString2);
+                if (subExpression2 != null) {
+                    final CompoundExpression multExpression = new MultiplicativeExpression();
+                    multExpression.addSubexpression(subExpression1);
+                    multExpression.addSubexpression(subExpression2);
+                    return multExpression;
+                }
             }
-
             indexTimes = str.indexOf("*", (indexTimes + 1));
         }
 
