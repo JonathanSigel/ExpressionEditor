@@ -45,7 +45,7 @@ public class KiraParser implements ExpressionParser {
                 return addExpression;
             }
 
-            indexPlus = subString2.indexOf("+");
+            indexPlus = str.indexOf("+", (indexPlus + 1));
         }
 
         //*
@@ -63,7 +63,7 @@ public class KiraParser implements ExpressionParser {
                 return multExpression;
             }
 
-            indexTimes = subString2.indexOf("*");
+            indexTimes = str.indexOf("*", (indexTimes + 1));
         }
 
         //()
@@ -80,10 +80,9 @@ public class KiraParser implements ExpressionParser {
                     return parenExpression;
                 }
 
-                indexRightParen = subString.indexOf(")");
+                indexRightParen = str.indexOf(")", (indexRightParen + 1));
             }
-            final String rightSide = str.substring(indexLeftParen + 1, str.length());
-            indexLeftParen = rightSide.indexOf("(");
+            indexLeftParen = str.indexOf("(", (indexLeftParen + 1));
         }
 
         // [0-9]+
