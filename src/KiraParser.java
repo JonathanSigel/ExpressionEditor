@@ -68,21 +68,18 @@ public class KiraParser implements ExpressionParser {
 
         //()
         int indexLeftParen = str.indexOf("(");
-        int indexRightParen = str.indexOf(")");
-        while (indexLeftParen > -1) {
-            while (indexRightParen > -1) {
+        int indexRightParen = str.lastIndexOf(")");
+        if (indexLeftParen == 0) {
+            if (indexRightParen == str.length() - 1) {
                 final String subString = str.substring(indexLeftParen + 1, indexRightParen);
                 final Expression subExpression = parseExpression(subString);
 
-                if (!(subExpression == null)) {
+                if (subExpression != null) {
                     final CompoundExpression parenExpression = new ParentheticalExpression();
                     parenExpression.addSubexpression(subExpression);
                     return parenExpression;
                 }
-
-                indexRightParen = str.indexOf(")", (indexRightParen + 1));
             }
-            indexLeftParen = str.indexOf("(", (indexLeftParen + 1));
         }
 
         // [0-9]+
