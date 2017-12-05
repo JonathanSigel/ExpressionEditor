@@ -37,8 +37,8 @@ public class SimpleExpressionParser implements ExpressionParser {
         while (indexPlus > -1) {
             final String subString1 = str.substring(0, indexPlus);
             final String subString2 = str.substring(indexPlus + 1, str.length());
-            final Expression subExpression1 = parseMultiplication(subString1);
 
+            final Expression subExpression1 = parseMultiplication(subString1);
             if (subExpression1 != null) {
                 final Expression subExpression2 = parseAddition(subString2);
                 if (subExpression2 != null) {
@@ -60,8 +60,8 @@ public class SimpleExpressionParser implements ExpressionParser {
         while (indexTimes > -1) {
             final String subString1 = str.substring(0, indexTimes);
             final String subString2 = str.substring(indexTimes + 1, str.length());
-            final Expression subExpression1 = parseParentheses(subString1);
 
+            final Expression subExpression1 = parseParentheses(subString1);
             if (subExpression1 != null) {
                 final Expression subExpression2 = parseMultiplication(subString2);
                 if (subExpression2 != null) {
@@ -83,8 +83,8 @@ public class SimpleExpressionParser implements ExpressionParser {
         if (indexLeftParen == 0) {
             if (indexRightParen == str.length() - 1) {
                 final String subString = str.substring(indexLeftParen + 1, indexRightParen);
-                final Expression subExpression = parseExpression(subString);
 
+                final Expression subExpression = parseExpression(subString);
                 if (subExpression != null) {
                     final CompoundExpression parenExpression = new ParentheticalExpression();
                     parenExpression.addSubexpression(subExpression);

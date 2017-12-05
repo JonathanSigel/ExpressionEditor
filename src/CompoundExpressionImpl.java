@@ -39,9 +39,9 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     public String convertToString (int indentLevel) {
         StringBuffer sb = new StringBuffer();
         indent(sb, indentLevel);
-        sb.append(mRep);
+        sb.append(mRep + "\n");
         for (int i = 0; i < mChildren.size(); i++) {
-            sb.append("\n" + mChildren.get(i).convertToString(indentLevel + 1));
+            sb.append(mChildren.get(i).convertToString(indentLevel + 1));
         }
         return sb.toString();
     }

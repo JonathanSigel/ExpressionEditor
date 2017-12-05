@@ -35,7 +35,7 @@ public class ExpressionTester {
 
         Expression copy = a2.deepCopy();
 
-        KiraParser parse1 = new KiraParser();
+        SimpleExpressionParser parse1 = new SimpleExpressionParser();
 
        try {
           // Expression parsed1 = parse1.parse("9*8+4+5*(3+2)", false);

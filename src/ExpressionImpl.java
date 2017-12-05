@@ -33,7 +33,7 @@ public class ExpressionImpl implements Expression {
     public String convertToString (int indentLevel) {
         StringBuffer sb = new StringBuffer();
         indent(sb, indentLevel);
-        sb.append(mRep);
+        sb.append(mRep + "\n");
         return sb.toString();
     }
 
