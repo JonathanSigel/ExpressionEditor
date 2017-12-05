@@ -28,17 +28,19 @@ public class SimpleExpressionParser implements ExpressionParser {
         return expression;
     }
 
-    protected Expression parseExpression (String str) {
+    private Expression parseExpression (String str) {
+        return parseAddition(str);
+    }
 
-        //+
+    private Expression parseAddition(String str) {
         int indexPlus = str.indexOf("+");
         while (indexPlus > -1) {
             final String subString1 = str.substring(0, indexPlus);
             final String subString2 = str.substring(indexPlus + 1, str.length());
-            final Expression subExpression1 = parseExpression(subString1);
+            final Expression subExpression1 = parseMultiplication(subString1);
 
             if (subExpression1 != null) {
-                final Expression subExpression2 = parseExpression(subString2);
+                final Expression subExpression2 = parseAddition(subString2);
                 if (subExpression2 != null) {
                     final CompoundExpression addExpression = new AdditiveExpression();
                     addExpression.addSubexpression(subExpression1);
@@ -50,15 +52,18 @@ public class SimpleExpressionParser implements ExpressionParser {
             indexPlus = str.indexOf("+", (indexPlus + 1));
         }
 
-        //*
+        return parseMultiplication(str);
+    }
+
+    private Expression parseMultiplication(String str) {
         int indexTimes = str.indexOf("*");
         while (indexTimes > -1) {
             final String subString1 = str.substring(0, indexTimes);
             final String subString2 = str.substring(indexTimes + 1, str.length());
-            final Expression subExpression1 = parseExpression(subString1);
+            final Expression subExpression1 = parseParentheses(subString1);
 
             if (subExpression1 != null) {
-                final Expression subExpression2 = parseExpression(subString2);
+                final Expression subExpression2 = parseMultiplication(subString2);
                 if (subExpression2 != null) {
                     final CompoundExpression multExpression = new MultiplicativeExpression();
                     multExpression.addSubexpression(subExpression1);
@@ -69,7 +74,10 @@ public class SimpleExpressionParser implements ExpressionParser {
             indexTimes = str.indexOf("*", (indexTimes + 1));
         }
 
-        //()
+        return parseParentheses(str);
+    }
+
+    private Expression parseParentheses(String str) {
         int indexLeftParen = str.indexOf("(");
         int indexRightParen = str.lastIndexOf(")");
         if (indexLeftParen == 0) {
@@ -85,6 +93,10 @@ public class SimpleExpressionParser implements ExpressionParser {
             }
         }
 
+        return parseNumbersAndLetters(str);
+    }
+
+    private Expression parseNumbersAndLetters(String str) {
         // [0-9]+
         if (str.matches("[0-9]+")) {
             return new LiteralExpression(str);
