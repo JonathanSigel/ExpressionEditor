@@ -30,12 +30,12 @@ public class OperationExpression extends CompoundExpressionImpl {
      * the child's children will be added to the list of children of this expression and the child removed.
      */
     private void flattenSelf() {
-        List<Expression> newChildren = new ArrayList<>();
+        final List<Expression> newChildren = new ArrayList<>();
         for (Expression existingChild: mChildren) {
             // first cast as an ExpressionImpl to use the getType method since it could be a literal
             if (((ExpressionImpl)existingChild).getType() == mRep) {
                 // Since the child has the same type as this object we know the child is an OperationExpression
-                List<Expression> childrenToAdd = ((OperationExpression)existingChild).getSubexpressions();
+                final List<Expression> childrenToAdd = ((OperationExpression)existingChild).getSubexpressions();
                 // update the new children to have this as their parent
                 for (Expression child: childrenToAdd) {
                     child.setParent(this);

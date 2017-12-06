@@ -55,7 +55,7 @@ public class ExpressionImpl implements Expression {
      * @return a String representation of the expression tree.
      */
     public String convertToString (int indentLevel) {
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         Expression.indent(sb, indentLevel);
         sb.append(mRep + "\n");
         return sb.toString();

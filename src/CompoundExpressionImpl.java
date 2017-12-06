@@ -40,7 +40,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     @Override
     public Expression deepCopy() {
-        CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
+        final CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
 
         for(Expression child : mChildren) {
             copy.addSubexpression(child.deepCopy());
@@ -50,8 +50,8 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
-     * Recursively flattens the expression as much as possible
-     * throughout the entire tree. Specifically, in every multiplicative
+     * Recursively flattens the expression as much as possible throughout the entire tree.
+     * Should be overridden for operation expressions so that in every multiplicative
      * or additive expression x whose first or last
      * child c is of the same type as x, the children of c will be added to x, and
      * c itself will be removed. This method modifies the expression itself.
@@ -69,7 +69,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     @Override
     public String convertToString (int indentLevel) {
-        StringBuffer sb = new StringBuffer();
+        final StringBuffer sb = new StringBuffer();
         Expression.indent(sb, indentLevel);
         sb.append(mRep + "\n");
 

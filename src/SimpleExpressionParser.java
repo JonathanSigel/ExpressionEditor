@@ -115,9 +115,11 @@ public class SimpleExpressionParser implements ExpressionParser {
      * @return the Expression object representing the parsed but unflattened expression tree
      */
     private Expression parseX(String str) {
-        int indexLeftParen = str.indexOf("(");
-        int indexRightParen = str.lastIndexOf(")");
+        final int indexLeftParen = str.indexOf("(");
+        final int indexRightParen = str.lastIndexOf(")");
+        // if the left parentheses is the first character in the string
         if (indexLeftParen == 0) {
+            // if the right parentheses is the last character in the string
             if (indexRightParen == str.length() - 1) {
                 final String subString = str.substring(indexLeftParen + 1, indexRightParen);
 
