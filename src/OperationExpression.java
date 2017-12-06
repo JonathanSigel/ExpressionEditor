@@ -3,23 +3,38 @@ import java.util.List;
 
 public class OperationExpression extends CompoundExpressionImpl {
 
+    /**
+     * An expression whose root is an operator (as in not a parentheses)
+     * @param representation a string representing the type of expression (as in "+", or "·")
+     */
     protected OperationExpression(String representation) {
         super(representation);
     }
 
+    /**
+     * Recursively flattens the expression as much as possible
+     * throughout the entire tree. Specifically, in every multiplicative
+     * or additive expression x whose first or last
+     * child c is of the same type as x, the children of c will be added to x, and
+     * c itself will be removed. This method modifies the expression itself.
+     */
     @Override
     public void flatten() {
         flattenChildren();
         flattenSelf();
     }
 
-    protected void flattenSelf() {
+    /**
+     * Helper method for applying the flatten method to the compound expression itself.
+     * If any of the expression's children are the same type as itself,
+     * the children's children will be added to this expression and the child removed.
+     */
+    private void flattenSelf() {
         List<Expression> newChildren = new ArrayList<>();
         for (Expression existingChild: mChildren) {
-            // first cast as an ExpressionImpl since it could be a literal
+            // first cast as an ExpressionImpl to use the getType method since it could be a literal
             if (((ExpressionImpl)existingChild).getType() == mRep) {
-                // Since the child has the same type as this object
-                // If we get here we know the child is an OperationExpression
+                // Since the child has the same type as this object we know the child is an OperationExpression
                 List<Expression> childrenToAdd = ((OperationExpression)existingChild).getSubexpressions();
                 // update the new children to have this as their parent
                 for (Expression child: childrenToAdd) {
@@ -29,9 +44,7 @@ public class OperationExpression extends CompoundExpressionImpl {
                 newChildren.addAll(childrenToAdd);
             }
             else{
-                // if it's not the same type, keep the existing child
-                // by building a new list we can preserve the order of children
-                // we inherit from the children we replace
+                // if it's not the same type, keep the existing child and add to the new list to preserve order
                 newChildren.add(existingChild);
             }
         }

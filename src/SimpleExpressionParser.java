@@ -1,5 +1,5 @@
 /**
- * Starter code to implement an ExpressionParser. Your parser methods should use the following grammar:
+ * Parser following the grammar :
  * E := A | X
  * A := A+M | M
  * M := M*M | X
@@ -7,6 +7,7 @@
  * L := [0-9]+ | [a-z]
  */
 public class SimpleExpressionParser implements ExpressionParser {
+
     /*
      * Attempts to create an expression tree -- flattened as much as possible -- from the specified String.
      * Throws a ExpressionParseException if the specified string cannot be parsed.
@@ -27,6 +28,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         expression.flatten();
         return expression;
     }
+
 
     private Expression parseExpression (String str) {
         return parseAddition(str);
