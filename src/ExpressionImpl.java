@@ -32,6 +32,7 @@ public class ExpressionImpl implements Expression {
      * Creates and returns a deep copy of the expression.
      * The entire tree rooted at the target node is copied, i.e.,
      * the copied Expression is as deep as possible.
+     * Should be overridden for compound expressions so as to also deep copy children.
      * @return the deep copy
      */
     public Expression deepCopy() {
@@ -39,18 +40,17 @@ public class ExpressionImpl implements Expression {
     }
 
     /**
-     * Recursively flattens the expression as much as possible
-     * throughout the entire tree. Specifically, in every multiplicative
-     * or additive expression x whose first or last
-     * child c is of the same type as x, the children of c will be added to x, and
-     * c itself will be removed. This method modifies the expression itself.
+     * Flattens the expression as much as possible
+     * throughout the entire tree. This method modifies the expression itself.
+     * Should be overridden for compound expressions so as to also recursively flatten children.
      */
     public void flatten () {
     }
 
     /**
-     * Creates a String representation by recursively printing out (using indentation) the
+     * Creates a String representation by printing out the
      * tree represented by this expression, starting at the specified indentation level.
+     * Should be overridden for compound expressions so as to also recursively convert children to string.
      * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
      * @return a String representation of the expression tree.
      */
