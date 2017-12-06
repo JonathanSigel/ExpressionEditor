@@ -27,7 +27,7 @@ public class OperationExpression extends CompoundExpressionImpl {
     /**
      * Helper method for applying the flatten method to the compound expression itself.
      * If any of the expression's children are the same type as itself,
-     * the children's children will be added to this expression and the child removed.
+     * the child's children will be added to the list of children of this expression and the child removed.
      */
     private void flattenSelf() {
         List<Expression> newChildren = new ArrayList<>();

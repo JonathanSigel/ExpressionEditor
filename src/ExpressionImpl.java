@@ -3,7 +3,6 @@ public class ExpressionImpl implements Expression {
     protected CompoundExpression mParent;
     protected String mRep;
 
-    //!!! Dad read
     /**
      * Implementation of the Expression Interface. Superclass for all types of expressions.
      * @param representation a string representing the expression or its type
@@ -39,7 +38,6 @@ public class ExpressionImpl implements Expression {
         return new ExpressionImpl(new String(mRep));
     }
 
-    //!!! Dad read
     /**
      * Recursively flattens the expression as much as possible
      * throughout the entire tree. Specifically, in every multiplicative
@@ -52,30 +50,17 @@ public class ExpressionImpl implements Expression {
 
     /**
      * Creates a String representation by recursively printing out (using indentation) the
-     *tree represented by this expression, starting at the specified indentation level.
+     * tree represented by this expression, starting at the specified indentation level.
      * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
      * @return a String representation of the expression tree.
      */
     public String convertToString (int indentLevel) {
         StringBuffer sb = new StringBuffer();
-        indent(sb, indentLevel);
+        Expression.indent(sb, indentLevel);
         sb.append(mRep + "\n");
         return sb.toString();
     }
 
-    /**
-     * Static helper method to indent a specified number of times from the left margin, by
-     * appending tab characters to teh specified StringBuffer.
-     * @param sb the StringBuffer to which to append tab characters.
-     * @param indentLevel the number of tabs to append.
-     */
-    public static void indent (StringBuffer sb, int indentLevel) {
-        for (int i = 0; i < indentLevel; i++) {
-            sb.append('\t');
-        }
-    }
-
-    //!!! Dad read
     /**
      * Returns a string representing the type of expression.
      * In the case of compound expression this will be a an operator or parentheses.

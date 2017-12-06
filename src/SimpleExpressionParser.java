@@ -1,7 +1,6 @@
 /**
  * Parser following the grammar :
- * E := A | X
- * A := A+M | M
+ * E := E+M | M
  * M := M*M | X
  * X := (E) | L
  * L := [0-9]+ | [a-z]
@@ -18,7 +17,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
         // Remove spaces -- this simplifies the parsing logic
         str = str.replaceAll(" ", "");
-        Expression expression = parseExpression(str);
+        Expression expression = parseE(str);
         if (expression == null) {
             // If we couldn't parse the string, then raise an error
             throw new ExpressionParseException("Cannot parse expression: " + str);
@@ -30,20 +29,14 @@ public class SimpleExpressionParser implements ExpressionParser {
     }
 
     /**
-     * Starts sequence of recursively parsing a string into an expression tree
+     * E := E+M | M
+     * Attempts to parse string into an expression tree
+     * with a root node that is the first instance of "+" which yields two valid subexpressions.
+     * If unable to, calls parseM on str
      * @param str the string to parse into an expression tree
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseExpression (String str) {
-        return parseAddition(str);
-    }
-
-    /**
-     * Parses string based on first valid instance of "+"
-     * @param str the string to parse into an expression tree
-     * @return the Expression object representing the parsed but unflattened expression tree
-     */
-    private Expression parseAddition(String str) {
+    private Expression parseE(String str) {
         int indexPlus = str.indexOf("+");
         while (indexPlus > -1) {
 
@@ -52,11 +45,11 @@ public class SimpleExpressionParser implements ExpressionParser {
             final String subString2 = str.substring(indexPlus + 1, str.length());
 
             // parses first subexpression
-            final Expression subExpression1 = parseMultiplication(subString1);
+            final Expression subExpression1 = parseM(subString1);
             // if first subexpression was able to be parsed, continue
             if (subExpression1 != null) {
                 // parses second subexpression
-                final Expression subExpression2 = parseAddition(subString2);
+                final Expression subExpression2 = parseE(subString2);
                 //if both subexpressions are able to be parsed, create new compound expression and add the two subexpressions to it
                 if (subExpression2 != null) {
                     final CompoundExpression addExpression = new AdditiveExpression();
@@ -71,15 +64,18 @@ public class SimpleExpressionParser implements ExpressionParser {
         }
 
         // if there are no valid instances of "+", check multiplication
-        return parseMultiplication(str);
+        return parseM(str);
     }
 
     /**
-     * Parses string based on first valid instance of "*"
+     * M := M*M | X
+     * Attempts to parse string into an expression tree
+     * with a root node that is the first instance of "*" which yields two valid subexpressions.
+     * If unable to, calls parseX on str
      * @param str the string to parse into an expression tree
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseMultiplication(String str) {
+    private Expression parseM(String str) {
         int indexTimes = str.indexOf("*");
         while (indexTimes > -1) {
 
@@ -88,11 +84,11 @@ public class SimpleExpressionParser implements ExpressionParser {
             final String subString2 = str.substring(indexTimes + 1, str.length());
 
             // parses first subexpression
-            final Expression subExpression1 = parseParentheses(subString1);
+            final Expression subExpression1 = parseX(subString1);
             // if first subexpression was able to be parsed, continue
             if (subExpression1 != null) {
                 // parses second subexpression
-                final Expression subExpression2 = parseMultiplication(subString2);
+                final Expression subExpression2 = parseM(subString2);
                 //if both subexpressions are able to be parsed, create new compound expression and add the two subexpressions to it
                 if (subExpression2 != null) {
                     final CompoundExpression multExpression = new MultiplicativeExpression();
@@ -107,15 +103,18 @@ public class SimpleExpressionParser implements ExpressionParser {
         }
 
         // if there are no valid instances of "*", check parentheses
-        return parseParentheses(str);
+        return parseX(str);
     }
 
     /**
-     * Parses string based on first valid instance of properly used parentheses
+     * X := (E) | L
+     * Attempts to parse string into an expression tree
+     * with a root node that is the first occurrence of closed parentheses which yields a valid subexpressions.
+     * If unable to, calls parseL on str
      * @param str the string to parse into an expression tree
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseParentheses(String str) {
+    private Expression parseX(String str) {
         int indexLeftParen = str.indexOf("(");
         int indexRightParen = str.lastIndexOf(")");
         if (indexLeftParen == 0) {
@@ -123,7 +122,7 @@ public class SimpleExpressionParser implements ExpressionParser {
                 final String subString = str.substring(indexLeftParen + 1, indexRightParen);
 
                 // parses subexpression within parentheses
-                final Expression subExpression = parseExpression(subString);
+                final Expression subExpression = parseE(subString);
                 //if subexpression is able to be parsed, create new compound expression and add the subexpression to it
                 if (subExpression != null) {
                     final CompoundExpression parenExpression = new ParentheticalExpression();
@@ -134,15 +133,18 @@ public class SimpleExpressionParser implements ExpressionParser {
         }
 
         // if there are no valid instances of parentheses check numbers and letters
-        return parseNumbersAndLetters(str);
+        return parseL(str);
     }
 
     /**
-     * Parses string based on valid occurrence of number and letter characters
+     * L := [0-9]+ | [a-z]
+     * Attempts to parse string into an expression tree
+     * with a root node that is a number or letter
+     * If unable to, returns null.
      * @param str the string to parse into an expression tree
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseNumbersAndLetters(String str) {
+    private Expression parseL(String str) {
         // checks numbers
         if (str.matches("[0-9]+")) {
             return new LiteralExpression(str);
