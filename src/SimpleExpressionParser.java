@@ -1,7 +1,7 @@
 /**
  * Parser following the grammar :
- * E := E+M | M
- * M := M*M | X
+ * E := M+E | M
+ * M := X*M | X
  * X := (E) | L
  * L := [0-9]+ | [a-z]
  */
@@ -29,7 +29,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     }
 
     /**
-     * E := E+M | M
+     * E := M+E | M
      * Attempts to parse string into an expression tree
      * with a root node that is the first instance of "+" which yields two valid subexpressions.
      * If unable to, calls parseM on str
@@ -68,7 +68,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     }
 
     /**
-     * M := M*M | X
+     * M := X*M | X
      * Attempts to parse string into an expression tree
      * with a root node that is the first instance of "*" which yields two valid subexpressions.
      * If unable to, calls parseX on str

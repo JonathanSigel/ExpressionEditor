@@ -38,7 +38,7 @@ public class ExpressionTester {
         SimpleExpressionParser parse1 = new SimpleExpressionParser();
 
        try {
-           Expression parsed1 = parse1.parse("(j+9+10111*s*6+(8+9*6))", false);
+           Expression parsed1 = parse1.parse("9*10+11*12+13*14+15*(16)", false);
            System.out.println(parsed1.convertToString(0));
            int i = 0;
        }

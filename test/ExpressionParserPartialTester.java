@@ -15,12 +15,12 @@ public class ExpressionParserPartialTester {
 	 * Instantiates the actors and movies graphs
 	 */
 	public void setUp () throws IOException {
-		_parser = new KiraParser();
+		_parser = new SimpleExpressionParser();
 	}
 
 	@Test
 	/**
-	 * Just verifies that the KiraParser could be instantiated without crashing.
+	 * Just verifies that the SimpleExpressionParser could be instantiated without crashing.
 	 */
 	public void finishedLoading () {
 		assertTrue(true);
