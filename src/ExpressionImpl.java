@@ -5,6 +5,7 @@ public class ExpressionImpl implements Expression {
 
     protected CompoundExpression mParent;
     protected String mRep;
+    protected Node mNode;
 
     /**
      * Implementation of the Expression Interface. Superclass for all types of expressions.
@@ -13,6 +14,7 @@ public class ExpressionImpl implements Expression {
     protected ExpressionImpl(String representation) {
         mParent = null;
         mRep = representation;
+        mNode = null;
     }
 
     /**
@@ -48,7 +50,8 @@ public class ExpressionImpl implements Expression {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode() {
-        return new Label(mRep);
+        mNode = new Label(mRep);
+        return mNode;
     }
 
     /**

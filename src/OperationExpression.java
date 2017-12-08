@@ -26,7 +26,8 @@ public class OperationExpression extends CompoundExpressionImpl {
                 expressionBox.getChildren().add(new Label(mRep));
         }
 
-        return expressionBox;
+        mNode = expressionBox;
+        return mNode;
     }
 
     /**

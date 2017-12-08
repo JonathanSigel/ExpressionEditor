@@ -25,6 +25,7 @@ public class ParentheticalExpression extends CompoundExpressionImpl {
         expressionBox.getChildren().add(mChildren.get(0).getNode());
         expressionBox.getChildren().add(rightParen);
 
-        return expressionBox;
+        mNode = expressionBox;
+        return mNode;
     }
 }
