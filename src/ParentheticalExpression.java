@@ -15,17 +15,5 @@ public class ParentheticalExpression extends CompoundExpressionImpl {
      * Returns the JavaFX node associated with this expression.
      * @return the JavaFX node associated with this expression.
      */
-    @Override
-    public Node getNode() {
-        final HBox expressionBox = new HBox();
-        final Label leftParen = new Label("(");
-        final Label rightParen = new Label(")");
-        expressionBox.getChildren().add(leftParen);
-        // because a parenthetical expression will only have one child, get the first element in the list of children
-        expressionBox.getChildren().add(mChildren.get(0).getNode());
-        expressionBox.getChildren().add(rightParen);
 
-        mNode = expressionBox;
-        return mNode;
-    }
 }

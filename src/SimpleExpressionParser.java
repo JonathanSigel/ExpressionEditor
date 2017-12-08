@@ -1,3 +1,7 @@
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 /**
  * Parser following the grammar :
  * E := M+E | M
@@ -17,7 +21,7 @@ public class SimpleExpressionParser implements ExpressionParser {
     public Expression parse (String str, boolean withJavaFXControls) throws ExpressionParseException {
         // Remove spaces -- this simplifies the parsing logic
         str = str.replaceAll(" ", "");
-        Expression expression = parseE(str);
+        Expression expression = parseE(str, withJavaFXControls);
         if (expression == null) {
             // If we couldn't parse the string, then raise an error
             throw new ExpressionParseException("Cannot parse expression: " + str);
@@ -34,9 +38,10 @@ public class SimpleExpressionParser implements ExpressionParser {
      * with a root node that is the first instance of "+" which yields two valid subexpressions.
      * If unable to, calls parseM on str
      * @param str the string to parse into an expression tree
+     * @param withJavaFXControls boolean to determine if corresponding JavaFX node should also be built when parsed
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseE(String str) {
+    private Expression parseE(String str, boolean withJavaFXControls) {
         int indexPlus = str.indexOf("+");
         while (indexPlus > -1) {
 
@@ -45,16 +50,24 @@ public class SimpleExpressionParser implements ExpressionParser {
             final String subString2 = str.substring(indexPlus + 1, str.length());
 
             // parses first subexpression
-            final Expression subExpression1 = parseM(subString1);
+            final Expression subExpression1 = parseM(subString1, withJavaFXControls);
             // if first subexpression was able to be parsed, continue
             if (subExpression1 != null) {
                 // parses second subexpression
-                final Expression subExpression2 = parseE(subString2);
+                final Expression subExpression2 = parseE(subString2, withJavaFXControls);
                 //if both subexpressions are able to be parsed, create new compound expression and add the two subexpressions to it
                 if (subExpression2 != null) {
                     final CompoundExpression addExpression = new AdditiveExpression();
                     addExpression.addSubexpression(subExpression1);
                     addExpression.addSubexpression(subExpression2);
+
+                    //also parses into node
+                    if (withJavaFXControls) {
+                        ((HBox)addExpression.getNode()).getChildren().add(subExpression1.getNode());
+                        ((HBox)addExpression.getNode()).getChildren().add(new Label("+"));
+                        ((HBox)addExpression.getNode()).getChildren().add(subExpression2.getNode());
+                    }
+
                     return addExpression;
                 }
             }
@@ -64,7 +77,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         }
 
         // if there are no valid instances of "+", check multiplication
-        return parseM(str);
+        return parseM(str, withJavaFXControls);
     }
 
     /**
@@ -73,9 +86,10 @@ public class SimpleExpressionParser implements ExpressionParser {
      * with a root node that is the first instance of "*" which yields two valid subexpressions.
      * If unable to, calls parseX on str
      * @param str the string to parse into an expression tree
+     * @param withJavaFXControls boolean to determine if corresponding JavaFX node should also be built when parsed
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseM(String str) {
+    private Expression parseM(String str, boolean withJavaFXControls) {
         int indexTimes = str.indexOf("*");
         while (indexTimes > -1) {
 
@@ -84,16 +98,24 @@ public class SimpleExpressionParser implements ExpressionParser {
             final String subString2 = str.substring(indexTimes + 1, str.length());
 
             // parses first subexpression
-            final Expression subExpression1 = parseX(subString1);
+            final Expression subExpression1 = parseX(subString1, withJavaFXControls);
             // if first subexpression was able to be parsed, continue
             if (subExpression1 != null) {
                 // parses second subexpression
-                final Expression subExpression2 = parseM(subString2);
+                final Expression subExpression2 = parseM(subString2, withJavaFXControls);
                 //if both subexpressions are able to be parsed, create new compound expression and add the two subexpressions to it
                 if (subExpression2 != null) {
                     final CompoundExpression multExpression = new MultiplicativeExpression();
                     multExpression.addSubexpression(subExpression1);
                     multExpression.addSubexpression(subExpression2);
+
+                    //also parses into node
+                    if (withJavaFXControls) {
+                        ((HBox)multExpression.getNode()).getChildren().add(subExpression1.getNode());
+                        ((HBox)multExpression.getNode()).getChildren().add(new Label("·"));
+                        ((HBox)multExpression.getNode()).getChildren().add(subExpression2.getNode());
+                    }
+
                     return multExpression;
                 }
             }
@@ -103,7 +125,7 @@ public class SimpleExpressionParser implements ExpressionParser {
         }
 
         // if there are no valid instances of "*", check parentheses
-        return parseX(str);
+        return parseX(str, withJavaFXControls);
     }
 
     /**
@@ -112,9 +134,10 @@ public class SimpleExpressionParser implements ExpressionParser {
      * with a root node that is the first occurrence of closed parentheses which yields a valid subexpressions.
      * If unable to, calls parseL on str
      * @param str the string to parse into an expression tree
+     * @param withJavaFXControls boolean to determine if corresponding JavaFX node should also be built when parsed
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseX(String str) {
+    private Expression parseX(String str, boolean withJavaFXControls) {
         final int indexLeftParen = str.indexOf("(");
         final int indexRightParen = str.lastIndexOf(")");
         // if the left parentheses is the first character in the string
@@ -124,18 +147,26 @@ public class SimpleExpressionParser implements ExpressionParser {
                 final String subString = str.substring(indexLeftParen + 1, indexRightParen);
 
                 // parses subexpression within parentheses
-                final Expression subExpression = parseE(subString);
+                final Expression subExpression = parseE(subString, withJavaFXControls);
                 //if subexpression is able to be parsed, create new compound expression and add the subexpression to it
                 if (subExpression != null) {
                     final CompoundExpression parenExpression = new ParentheticalExpression();
                     parenExpression.addSubexpression(subExpression);
+
+                    //also parses into node
+                    if (withJavaFXControls) {
+                        ((HBox)parenExpression.getNode()).getChildren().add(new Label("("));
+                        ((HBox)parenExpression.getNode()).getChildren().add(subExpression.getNode());
+                        ((HBox)parenExpression.getNode()).getChildren().add(new Label(")"));
+                    }
+
                     return parenExpression;
                 }
             }
         }
 
         // if there are no valid instances of parentheses check numbers and letters
-        return parseL(str);
+        return parseL(str, withJavaFXControls);
     }
 
     /**
@@ -144,21 +175,35 @@ public class SimpleExpressionParser implements ExpressionParser {
      * with a root node that is a number or letter
      * If unable to, returns null.
      * @param str the string to parse into an expression tree
+     * @param withJavaFXControls boolean to determine if corresponding JavaFX node should also be built when parsed
      * @return the Expression object representing the parsed but unflattened expression tree
      */
-    private Expression parseL(String str) {
+    private Expression parseL(String str, boolean withJavaFXControls) {
+
+        Expression literal = null;
+
         // checks numbers
         if (str.matches("[0-9]+")) {
-            return new LiteralExpression(str);
+            literal = new LiteralExpression(str);
+
+            //also parses into node
+            if (withJavaFXControls) {
+                ((HBox)literal.getNode()).getChildren().add(new Label(str));
+            }
         }
 
         // checks letters
         if (str.matches("[a-z]")) {
-            return new LiteralExpression(str);
+            literal = new LiteralExpression(str);
+
+            //also parses into node
+            if (withJavaFXControls) {
+                ((HBox)literal.getNode()).getChildren().add(new Label(str));
+            }
         }
 
         // returns null if string could not be parsed
-        return null;
+        return literal;
     }
 }
 

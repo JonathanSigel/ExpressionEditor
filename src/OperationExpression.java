@@ -15,21 +15,6 @@ public class OperationExpression extends CompoundExpressionImpl {
         super(representation);
     }
 
-    //!!! not finished
-    @Override
-    public Node getNode() {
-        final HBox expressionBox = new HBox();
-
-        for (int i = 0; i < mChildren.size(); i++) {
-            expressionBox.getChildren().add(mChildren.get(i).getNode());
-            if (i < mChildren.size() - 1)
-                expressionBox.getChildren().add(new Label(mRep));
-        }
-
-        mNode = expressionBox;
-        return mNode;
-    }
-
     /**
      * Recursively flattens the expression as much as possible
      * throughout the entire tree. Specifically, in every multiplicative

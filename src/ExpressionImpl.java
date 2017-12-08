@@ -1,5 +1,6 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 public class ExpressionImpl implements Expression {
 
@@ -14,7 +15,7 @@ public class ExpressionImpl implements Expression {
     protected ExpressionImpl(String representation) {
         mParent = null;
         mRep = representation;
-        mNode = null;
+        mNode = new HBox();
     }
 
     /**
@@ -50,7 +51,6 @@ public class ExpressionImpl implements Expression {
      * @return the JavaFX node associated with this expression.
      */
     public Node getNode() {
-        mNode = new Label(mRep);
         return mNode;
     }
 
