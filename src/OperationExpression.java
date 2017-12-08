@@ -1,3 +1,7 @@
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +13,20 @@ public class OperationExpression extends CompoundExpressionImpl {
      */
     protected OperationExpression(String representation) {
         super(representation);
+    }
+
+    //!!! not finished
+    @Override
+    public Node getNode() {
+        final HBox expressionBox = new HBox();
+
+        for (int i = 0; i < mChildren.size(); i++) {
+            expressionBox.getChildren().add(mChildren.get(i).getNode());
+            if (i < mChildren.size() - 1)
+                expressionBox.getChildren().add(new Label(mRep));
+        }
+
+        return expressionBox;
     }
 
     /**

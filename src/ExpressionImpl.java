@@ -1,3 +1,6 @@
+import javafx.scene.Node;
+import javafx.scene.control.Label;
+
 public class ExpressionImpl implements Expression {
 
     protected CompoundExpression mParent;
@@ -37,6 +40,15 @@ public class ExpressionImpl implements Expression {
      */
     public Expression deepCopy() {
         return new ExpressionImpl(new String(mRep));
+    }
+
+    /**
+     * Returns the JavaFX node associated with this expression.
+     * Should be overridden for subclasses of compound expression so as to also include the nodes of the children.
+     * @return the JavaFX node associated with this expression.
+     */
+    public Node getNode() {
+        return new Label(mRep);
     }
 
     /**
