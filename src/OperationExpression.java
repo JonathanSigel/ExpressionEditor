@@ -28,6 +28,12 @@ public class OperationExpression extends CompoundExpressionImpl {
         flattenSelf();
     }
 
+    @Override
+    public void flattenNodes() {
+        flattenChildrenNodes();
+        flattenSelfNode();
+    }
+
     /**
      * Helper method for applying the flatten method to the compound expression itself.
      * If any of the expression's children are the same type as itself,
@@ -54,5 +60,25 @@ public class OperationExpression extends CompoundExpressionImpl {
         }
         // replace the children list with the new list
         mChildren = newChildren;
+    }
+
+    private void flattenSelfNode() {
+        ((HBox) mNode).getChildren().clear();
+
+        for (Expression existingChild: mChildren) {
+            // first cast as an ExpressionImpl to use the getType method since it could be a literal
+            if (((ExpressionImpl)existingChild).getType() == mRep) {
+                final List<Node> nodesToAdd = ((HBox)existingChild.getNode()).getChildren();
+                ((HBox) mNode).getChildren().addAll(nodesToAdd);
+                ((HBox) mNode).getChildren().add(new Label(mRep));
+            }
+            else{
+                ((HBox) mNode).getChildren().add(existingChild.getNode());
+                ((HBox) mNode).getChildren().add(new Label(mRep));
+            }
+        }
+
+        //removes last additional operation sign
+        ((HBox) mNode).getChildren().remove(((HBox) mNode).getChildren().size()-1, ((HBox) mNode).getChildren().size());
     }
 }

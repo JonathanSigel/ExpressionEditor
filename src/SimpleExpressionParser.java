@@ -29,6 +29,11 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         // Flatten the expression before returning
         expression.flatten();
+
+        if(withJavaFXControls) {
+            ((ExpressionImpl)expression).flattenNodes();
+        }
+
         return expression;
     }
 

@@ -5,12 +5,13 @@ import javafx.scene.layout.HBox;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression{
+public class CompoundExpressionImpl extends ExpressionImpl implements CompoundExpression {
 
     protected List<Expression> mChildren;
 
     /**
      * Implementation of the CompoundExpression Interface. Superclass for all types of expressions with children.
+     *
      * @param representation a string representing the type of expression (as in "()", "+", or "·")
      */
     protected CompoundExpressionImpl(String representation) {
@@ -20,6 +21,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     /**
      * Adds the specified expression as a child and sets the child's parent to be this CompoundExpression.
+     *
      * @param subexpression the child expression to add
      */
     public void addSubexpression(Expression subexpression) {
@@ -30,6 +32,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     /**
      * Returns the list of the CompoundExpression's children.
+     *
      * @return list of children
      */
     public List<Expression> getSubexpressions() {
@@ -40,13 +43,14 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * Creates and returns a deep copy of the expression.
      * The entire tree rooted at the target node is copied, i.e.,
      * the copied Expression is as deep as possible.
+     *
      * @return the deep copy
      */
     @Override
     public Expression deepCopy() {
         final CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
 
-        for(Expression child : mChildren) {
+        for (Expression child : mChildren) {
             copy.addSubexpression(child.deepCopy());
         }
 
@@ -65,19 +69,27 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         flattenChildren();
     }
 
+    @Override
+    public void flattenNodes() {
+        flattenChildrenNodes();
+    }
+
+
+
     /**
      * Creates a String representation by recursively printing out (using indentation) the
      * tree represented by this expression, starting at the specified indentation level.
+     *
      * @param indentLevel the indentation level (number of tabs from the left margin) at which to start
      * @return a String representation of the expression tree.
      */
     @Override
-    public String convertToString (int indentLevel) {
+    public String convertToString(int indentLevel) {
         final StringBuffer sb = new StringBuffer();
         Expression.indent(sb, indentLevel);
         sb.append(mRep + "\n");
 
-        for(Expression child : mChildren) {
+        for (Expression child : mChildren) {
             sb.append(child.convertToString(indentLevel + 1));
         }
 
@@ -88,8 +100,14 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      * Helper method for applying the flatten method to all children of this CompoundExpression
      */
     protected void flattenChildren() {
-        for(Expression child : mChildren) {
+        for (Expression child : mChildren) {
             child.flatten();
+        }
+    }
+
+    protected void flattenChildrenNodes() {
+        for (Expression child : mChildren) {
+            ((ExpressionImpl) child).flattenNodes();
         }
     }
 }

@@ -11,9 +11,4 @@ public class ParentheticalExpression extends CompoundExpressionImpl {
         super("()");
     }
 
-    /**
-     * Returns the JavaFX node associated with this expression.
-     * @return the JavaFX node associated with this expression.
-     */
-
 }

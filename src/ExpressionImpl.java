@@ -63,6 +63,14 @@ public class ExpressionImpl implements Expression {
     }
 
     /**
+     * Flattens the JavaFX nodes in the expression as much as possible
+     * throughout the entire tree. This method modifies the nodes themselves.
+     * Should be overridden for compound expressions so as to also recursively flatten children's nodes.
+     */
+    public void flattenNodes() {
+    }
+
+    /**
      * Creates a String representation by printing out the
      * tree represented by this expression, starting at the specified indentation level.
      * Should be overridden for compound expressions so as to also recursively convert children to string.
