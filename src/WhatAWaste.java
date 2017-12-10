@@ -1,137 +1,77 @@
 import javafx.application.Application;
-import java.util.*;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Label;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.Node;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
-
 public class WhatAWaste extends Application {
-	public static void main (String[] args) {
+	public static void main(String[] args) {
 		launch(args);
 	}
 
-	/**
-	 * Mouse event handler for the entire pane that constitutes the WhatAWaste
-	 */
-	private static class MouseEventHandler implements EventHandler<MouseEvent> {
-		private Label aLabel;
-		private Pane aPane;
-		double lastX, lastY;
+	private static class MouseEventHandler implements
+			EventHandler<MouseEvent> {
+		private HBox _box;
+		/* IMPLEMENT ME */
+		double _lastX, _lastY;
 
-		MouseEventHandler (Pane pane_, CompoundExpression rootExpression, Label label_) {
-			aLabel = label_;
+		MouseEventHandler(HBox box) {
+			_box = box;
 		}
 
-
-		public void handle (MouseEvent event) {
-			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-			}
-
-
+		public void handle(MouseEvent event) {
 			final double sceneX = event.getSceneX();
 			final double sceneY = event.getSceneY();
 			if (event.getEventType() ==
 					MouseEvent.MOUSE_PRESSED) {
+// IMPLEMENT ME
 			} else if (event.getEventType() ==
 					MouseEvent.MOUSE_DRAGGED) {
-				aLabel.setTranslateX(aLabel.getTranslateX() + (sceneX - lastX));
-				aLabel.setTranslateY(aLabel.getTranslateY() + (sceneY - lastY));
+				_box.setTranslateX(_box.getTranslateX() + (sceneX - _lastX));
+				_box.setTranslateY(_box.getTranslateY() + (sceneY - _lastY));
+				_box.setStyle("-fx-border-style: solid inside;" + "-fx-border-color: blue;");
 			} else if (event.getEventType() ==
 					MouseEvent.MOUSE_RELEASED) {
-				aLabel.setLayoutX(aLabel.getLayoutX() +
-						aLabel.getTranslateX());
-				aLabel.setLayoutY(aLabel.getLayoutY() +
-						aLabel.getTranslateY());
-				aLabel.setTranslateX(0);
-				aLabel.setTranslateY(0);
+				_box.setLayoutX(_box.getLayoutX() +
+						_box.getTranslateX());
+				_box.setLayoutY(_box.getLayoutY() +
+						_box.getTranslateY());
+				_box.setTranslateX(0);
+				_box.setTranslateY(0);
+				_box.setStyle("-fx-border-style: none;");
 			}
-			lastX = sceneX;
-			lastY = sceneY;
+			_lastX = sceneX;
+			_lastY = sceneY;
 		}
 	}
 
-	/**
-	 * Size of the GUI
-	 */
-	private static final int WINDOW_WIDTH = 500, WINDOW_HEIGHT = 250;
-
-	/**
-	 * Initial expression shown in the textbox
-	 */
-	private static final String EXAMPLE_EXPRESSION = "2*x+3*y+4*z+(7+6*z)";
-
-	/**
-	 * Parser used for parsing expressions.
-	 */
-	private final ExpressionParser expressionParser = new SimpleExpressionParser();
-
 	@Override
-	public void start (Stage primaryStage) {
-		primaryStage.setTitle("Expression Editor");
-
-		// Add the textbox and Parser button
-		final Pane queryPane = new HBox();
-		final TextField textField = new TextField(EXAMPLE_EXPRESSION);
-		final Button button = new Button("Parse");
-		queryPane.getChildren().add(textField);
-
-		final Pane expressionPane = new Pane();
-
-		// Add the callback to handle when the Parse button is pressed	
-		button.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			public void handle (MouseEvent e) {
-				// Try to parse the expression
-				try {
-					// Success! Add the expression's Node to the expressionPane
-					final Expression expression = expressionParser.parse(textField.getText(), true);
-
-					System.out.println(expression.convertToString(0));
-					expressionPane.getChildren().clear();
-					expressionPane.getChildren().add(expression.getNode());
-					expression.getNode().setLayoutX(WINDOW_WIDTH/4);
-					expression.getNode().setLayoutY(WINDOW_HEIGHT/2);
-
-					final Label label = new Label(textField.getText());
-
-					// If the parsed expression is a CompoundExpression, then register some callbacks
-					if (expression instanceof CompoundExpression) {
-						((Pane) expression.getNode()).setBorder(Expression.NO_BORDER);
-						final MouseEventHandler eventHandler = new MouseEventHandler(expressionPane, (CompoundExpression) expression, label);
-						expressionPane.setOnMousePressed(eventHandler);
-						expressionPane.setOnMouseDragged(eventHandler);
-						expressionPane.setOnMouseReleased(eventHandler);
-					}
-				} catch (ExpressionParseException epe) {
-					// If we can't parse the expression, then mark it in red
-					textField.setStyle("-fx-text-fill: red");
-				}
-			}
-		});
-		queryPane.getChildren().add(button);
-
-
-		// Reset the color to black whenever the user presses a key
-		textField.setOnKeyPressed(e -> textField.setStyle("-fx-text-fill: black"));
-		
-		final BorderPane root = new BorderPane();
-		root.setTop(queryPane);
-		root.setCenter(expressionPane);
-
-		primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
+	public void start(Stage primaryStage) {
+		primaryStage.setTitle("EventDrivenProgram");
+		final Pane root = new Pane();
+		final HBox hbox = new HBox();
+		final HBox hbox2 = new HBox();
+		final Label label = new Label("Drag me!");
+		final Label label2 = new Label("Drag me too!");
+		final Label label3 = new Label("Drag me three!");
+		final Label label4 = new Label("STAY AWAY FROM ME!");
+		final Label label5 = new Label("Meh.");
+		final Label label6 = new Label("I'm a rebel!");
+		root.getChildren().add(hbox);
+		hbox.getChildren().add(label);
+		hbox.getChildren().add(label2);
+		hbox.getChildren().add(hbox2);
+		hbox2.getChildren().add(label3);
+		hbox2.getChildren().add(label4);
+		hbox2.getChildren().add(label5);
+		final MouseEventHandler handler = new
+				MouseEventHandler(hbox);
+		hbox.setOnMousePressed(handler);
+		hbox.setOnMouseDragged(handler);
+		hbox.setOnMouseReleased(handler);
+		primaryStage.setScene(new Scene(root, 600, 480));
 		primaryStage.show();
 	}
 }
