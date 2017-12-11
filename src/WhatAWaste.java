@@ -4,6 +4,7 @@ import javafx.scene.Scene;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.control.Label;
+import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 public class WhatAWaste extends Application {
@@ -13,12 +14,12 @@ public class WhatAWaste extends Application {
 
 	private static class MouseEventHandler implements
 			EventHandler<MouseEvent> {
-		private HBox _box;
 		/* IMPLEMENT ME */
 		double _lastX, _lastY;
+		private Node _node;
 
-		MouseEventHandler(HBox box) {
-			_box = box;
+		MouseEventHandler(Node node) {
+			_node = node;
 		}
 
 		public void handle(MouseEvent event) {
@@ -29,18 +30,18 @@ public class WhatAWaste extends Application {
 // IMPLEMENT ME
 			} else if (event.getEventType() ==
 					MouseEvent.MOUSE_DRAGGED) {
-				_box.setTranslateX(_box.getTranslateX() + (sceneX - _lastX));
-				_box.setTranslateY(_box.getTranslateY() + (sceneY - _lastY));
-				_box.setStyle("-fx-border-style: solid inside;" + "-fx-border-color: blue;");
+				_node.setTranslateX(_node.getTranslateX() + (sceneX - _lastX));
+				_node.setTranslateY(_node.getTranslateY() + (sceneY - _lastY));
+				_node.setStyle("-fx-border-style: solid inside;" + "-fx-border-color: blue;");
 			} else if (event.getEventType() ==
 					MouseEvent.MOUSE_RELEASED) {
-				_box.setLayoutX(_box.getLayoutX() +
-						_box.getTranslateX());
-				_box.setLayoutY(_box.getLayoutY() +
-						_box.getTranslateY());
-				_box.setTranslateX(0);
-				_box.setTranslateY(0);
-				_box.setStyle("-fx-border-style: none;");
+				_node.setLayoutX(_node.getLayoutX() +
+						_node.getTranslateX());
+				_node.setLayoutY(_node.getLayoutY() +
+						_node.getTranslateY());
+				_node.setTranslateX(0);
+				_node.setTranslateY(0);
+				_node.setStyle("-fx-border-style: none;");
 			}
 			_lastX = sceneX;
 			_lastY = sceneY;
@@ -51,6 +52,8 @@ public class WhatAWaste extends Application {
 	public void start(Stage primaryStage) {
 		primaryStage.setTitle("EventDrivenProgram");
 		final Pane root = new Pane();
+		final Pane minipane1 = new Pane();
+		minipane1.setPrefSize(200,200);
 		final HBox hbox = new HBox();
 		final HBox hbox2 = new HBox();
 		final Label label = new Label("Drag me!");
@@ -59,18 +62,31 @@ public class WhatAWaste extends Application {
 		final Label label4 = new Label("STAY AWAY FROM ME!");
 		final Label label5 = new Label("Meh.");
 		final Label label6 = new Label("I'm a rebel!");
-		root.getChildren().add(hbox);
-		hbox.getChildren().add(label);
-		hbox.getChildren().add(label2);
-		hbox.getChildren().add(hbox2);
-		hbox2.getChildren().add(label3);
-		hbox2.getChildren().add(label4);
-		hbox2.getChildren().add(label5);
+		root.getChildren().add(minipane1);
+		minipane1.getChildren().add(label);
+		minipane1.getChildren().add(label2);
 		final MouseEventHandler handler = new
-				MouseEventHandler(hbox);
-		hbox.setOnMousePressed(handler);
-		hbox.setOnMouseDragged(handler);
-		hbox.setOnMouseReleased(handler);
+				MouseEventHandler(label);
+		label.setOnMousePressed(handler);
+		label.setOnMouseDragged(handler);
+		label.setOnMouseReleased(handler);
+		final MouseEventHandler handler2 = new
+				MouseEventHandler(label2);
+		label2.setOnMousePressed(handler2);
+		label2.setOnMouseDragged(handler2);
+		label2.setOnMouseReleased(handler2);
+		final MouseEventHandler handler3 = new
+				MouseEventHandler(minipane1);
+		minipane1.setOnMousePressed(handler3);
+		minipane1.setOnMouseDragged(handler3);
+		minipane1.setOnMouseReleased(handler3);
+		//final MouseEventHandler handler3 = new
+		//		MouseEventHandler(minipane1);
+		//label2.setOnMousePressed(handler2);
+		//label2.setOnMouseDragged(handler2);
+		//label2.setOnMouseReleased(handler2);
+
+
 		primaryStage.setScene(new Scene(root, 600, 480));
 		primaryStage.show();
 	}
