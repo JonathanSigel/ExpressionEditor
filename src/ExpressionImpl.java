@@ -147,6 +147,7 @@ public class ExpressionImpl implements Expression {
             Bounds currentBoundsInScene = mNode.localToScene(mNode.getBoundsInLocal());
             final double currentX = currentBoundsInScene.getMinX();
             double leftX = currentX;
+            double leftWidth = 0;
             double operatorWidth = 0;
 
             if (currentCase.size() > 0) {
@@ -163,6 +164,7 @@ public class ExpressionImpl implements Expression {
 
                 Bounds leftBoundsInScene = ((HBox)p).getChildren().get(leftIndex).localToScene(((HBox)p).getChildren().get(leftIndex).getBoundsInLocal());
                 leftX = leftBoundsInScene.getMinX();
+                leftWidth = leftBoundsInScene.getWidth();
 
                 if (Math.abs(x - leftX) < Math.abs(x - currentX)) {
                     p.getChildren().setAll(leftCase);
@@ -176,7 +178,8 @@ public class ExpressionImpl implements Expression {
                 Collections.swap(rightCase, currentIndex, rightIndex);
 
                 Bounds rightBoundsInScene = ((HBox)p).getChildren().get(rightIndex).localToScene(((HBox)p).getChildren().get(rightIndex).getBoundsInLocal());
-                double rightX = rightBoundsInScene.getMinX();
+                
+                final double rightX = leftX + leftWidth + operatorWidth + rightBoundsInScene.getWidth() + operatorWidth;
 
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
                     p.getChildren().setAll(rightCase);
