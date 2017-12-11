@@ -37,7 +37,7 @@ public class KiraExpressionEditor extends Application {
         MouseEventHandler (Pane pane, CompoundExpression rootExpression) {
             mPane = pane;
             mRootExpression = rootExpression;
-            mFocusedExpression = rootExpression;
+            mFocusedExpression = null;
             mCopyExpression = null;
         }
 
@@ -46,9 +46,16 @@ public class KiraExpressionEditor extends Application {
             final double x = event.getSceneX();
             final double y = event.getSceneY();
 
-            if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+            if (event.getEventType() == MouseEvent.MOUSE_PRESSED && mFocusedExpression == null) {
+                mFocusedExpression = ((ExpressionImpl)mRootExpression).focus(x, y);
+                mCopyExpression = mFocusedExpression.deepCopy();
+                mPane.getChildren().add(mCopyExpression.getNode());
+                mCopyExpression.getNode().setLayoutX(x);
+                mCopyExpression.getNode().setLayoutY(y);
+
+            } else if (event.getEventType() == MouseEvent.MOUSE_PRESSED && mFocusedExpression != null) {
                 ((HBox)mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
-                mFocusedExpression = ((ExpressionImpl)mFocusedExpression).focus(x, y, mRootExpression);
+                mFocusedExpression = ((ExpressionImpl)mFocusedExpression).focus(x, y);
                 mCopyExpression = mFocusedExpression.deepCopy();
                 mPane.getChildren().add(mCopyExpression.getNode());
                 mCopyExpression.getNode().setLayoutX(x);
@@ -58,6 +65,7 @@ public class KiraExpressionEditor extends Application {
                 mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
                 mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
                 ((ExpressionImpl)mFocusedExpression).swap(x);
+
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
                 mPane.getChildren().remove(mCopyExpression.getNode());
                 mCopyExpression = null;
@@ -76,7 +84,7 @@ public class KiraExpressionEditor extends Application {
     /**
      * Initial expression shown in the textbox
      */
-    private static final String EXAMPLE_EXPRESSION = "2+3";
+    private static final String EXAMPLE_EXPRESSION = "2+6*6+(9*7+8)";
 
     /**
      * Parser used for parsing expressions.

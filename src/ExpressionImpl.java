@@ -1,4 +1,5 @@
 import javafx.collections.FXCollections;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
@@ -143,8 +144,8 @@ public class ExpressionImpl implements Expression {
             final int leftExpressionIndex = expressionIndex - 1;
             final int rightExpressionIndex = expressionIndex + 1;
 
-            final double currentX = mNode.getLayoutX();
-            double leftWidth = 0;
+            Bounds currentBoundsInScene = mNode.localToScene(mNode.getBoundsInLocal());
+            final double currentX = currentBoundsInScene.getMinX();
             double leftX = currentX;
             double operatorWidth = 0;
 
@@ -160,21 +161,23 @@ public class ExpressionImpl implements Expression {
             if (leftIndex >= 0) {
                 Collections.swap(leftCase, currentIndex, leftIndex);
 
-                leftX = currentCase.get(leftIndex).getLayoutX();
+                Bounds leftBoundsInScene = ((HBox)p).getChildren().get(leftIndex).localToScene(((HBox)p).getChildren().get(leftIndex).getBoundsInLocal());
+                leftX = leftBoundsInScene.getMinX();
+
                 if (Math.abs(x - leftX) < Math.abs(x - currentX)) {
                     p.getChildren().setAll(leftCase);
                     swapSubexpressions(expressionIndex, leftExpressionIndex);
                     return;
                 }
-                leftWidth = ((Region)currentCase.get(leftIndex)).getWidth();
             }
 
             List<Node> rightCase = FXCollections.observableArrayList(p.getChildren());
             if (rightIndex < rightCase.size()) {
                 Collections.swap(rightCase, currentIndex, rightIndex);
-                final double rightWidth = ((Region)currentCase.get(rightIndex)).getWidth();
 
-                final double rightX = leftX + leftWidth + operatorWidth + rightWidth + operatorWidth;
+                Bounds rightBoundsInScene = ((HBox)p).getChildren().get(rightIndex).localToScene(((HBox)p).getChildren().get(rightIndex).getBoundsInLocal());
+                double rightX = rightBoundsInScene.getMinX();
+
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
                     p.getChildren().setAll(rightCase);
                     swapSubexpressions(expressionIndex, rightExpressionIndex);
@@ -188,7 +191,7 @@ public class ExpressionImpl implements Expression {
         Collections.swap(((CompoundExpressionImpl) mParent).getSubexpressions(), currentIndex, swapIndex);
     }
 
-    public Expression focus(double x, double y, CompoundExpression rootExpression) {
-        return rootExpression;
+    public Expression focus(double x, double y) {
+        return null;
     }
 }

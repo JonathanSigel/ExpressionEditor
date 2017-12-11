@@ -145,7 +145,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     @Override
-    public Expression focus(double x, double y, CompoundExpression rootExpression) {
+    public Expression focus(double x, double y) {
 
         for(Expression child : mChildren) {
 
@@ -161,6 +161,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
                 return child;
             }
         }
-        return rootExpression;
+        return null;
     }
 }
