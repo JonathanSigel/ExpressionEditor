@@ -3,8 +3,10 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class ExpressionImpl implements Expression {
@@ -125,5 +127,58 @@ public class ExpressionImpl implements Expression {
      */
     public String getType() {
         return mRep;
+    }
+
+    public void swap(double x) {
+        if (mParent != null && mNode != null) {
+            final HBox p = (HBox) mNode.getParent();
+            List<Node> currentCase = FXCollections.observableArrayList(p.getChildren());
+
+            final int currentIndex = currentCase.indexOf(mNode);
+            // 2 so as to skip over operation labels
+            final int leftIndex = currentIndex - 2;
+            final int rightIndex = currentIndex + 2;
+
+            final double currentX = mNode.getLayoutX();
+            double leftWidth = 0;
+            double leftX = currentX;
+            double operatorWidth = 0;
+
+            if (currentCase.size() > 0) {
+                if (currentIndex == 0) {
+                    operatorWidth = ((Region)currentCase.get(1)).getWidth();
+                } else {
+                    operatorWidth = ((Region)currentCase.get(currentCase.size() - 2)).getWidth();
+                }
+            }
+
+            List<Node> leftCase = FXCollections.observableArrayList(p.getChildren());
+            if (leftIndex >= 0) {
+                Collections.swap(leftCase, currentIndex, leftIndex);
+
+                leftX = currentCase.get(leftIndex).getLayoutX();
+                if (Math.abs(x - leftX) < Math.abs(x - currentX)) {
+                    p.getChildren().setAll(leftCase);
+                    return;
+                }
+                leftWidth = ((Region)currentCase.get(leftIndex)).getWidth();
+            }
+
+            List<Node> rightCase = FXCollections.observableArrayList(p.getChildren());
+            if (rightIndex < rightCase.size()) {
+                Collections.swap(rightCase, currentIndex, rightIndex);
+                final double rightWidth = ((Region)currentCase.get(rightIndex)).getWidth();
+
+                final double rightX = leftX + leftWidth + operatorWidth + rightWidth + operatorWidth;
+                if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
+                    p.getChildren().setAll(rightCase);
+                    return;
+                }
+            }
+        }
+    }
+
+    private void swapSubexpressions(int currentIndex, int swapIndex) {
+        Collections.swap(((CompoundExpressionImpl) mParent).getSubexpressions(), currentIndex, swapIndex);
     }
 }

@@ -77,10 +77,10 @@ public class KiraDragAndDropper extends Application {
             List<Node> leftCase = FXCollections.observableArrayList(p.getChildren());
             if (leftIndex >= 0) {
                 Collections.swap(leftCase, currentIndex, leftIndex);
-                p.getChildren().setAll(leftCase);
 
                 leftX = currentCase.get(leftIndex).getLayoutX();
                 if (Math.abs(mLastX - leftX) < Math.abs(mLastX - currentX)) {
+                    p.getChildren().setAll(leftCase);
                     return;
                 }
                 leftWidth = ((Region)currentCase.get(leftIndex)).getWidth();
@@ -89,17 +89,14 @@ public class KiraDragAndDropper extends Application {
             List<Node> rightCase = FXCollections.observableArrayList(p.getChildren());
             if (rightIndex < rightCase.size()) {
                 Collections.swap(rightCase, currentIndex, rightIndex);
-                p.getChildren().setAll(rightCase);
                 final double rightWidth = ((Region)currentCase.get(rightIndex)).getWidth();
 
                 final double rightX = leftX + leftWidth + operatorWidth + rightWidth + operatorWidth;
                 if (Math.abs(mLastX - rightX) < Math.abs(mLastX - currentX)) {
-
+                    p.getChildren().setAll(rightCase);
                     return;
                 }
             }
-
-            p.getChildren().setAll(currentCase);
         }
 
     }
