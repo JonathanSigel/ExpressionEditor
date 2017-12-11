@@ -74,8 +74,8 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         List<Node> copyChildren = FXCollections.observableArrayList(((HBox)mNode).getChildren());
         List<Node> newChildren = new ArrayList<Node>();
 
+        int index = 0;
         for(Node child : copyChildren) {
-            int index = 0;
             if (child instanceof Label) {
                 newChildren.add(new Label(new String(((Label) child).getText())));
             } else {
@@ -146,8 +146,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     @Override
     public Expression focus(double x, double y, CompoundExpression rootExpression) {
-
-        //((HBox)mNode).setBorder(NO_BORDER);
 
         for(Expression child : mChildren) {
 

@@ -33,7 +33,7 @@ public class KiraDragAndDropper extends Application {
             final double sceneY = event.getSceneY();
 
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-                swapChildren();
+                //swapChildren();
 
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 mNode.setTranslateX(mNode.getTranslateX() + (sceneX - mLastX));
@@ -118,7 +118,24 @@ public class KiraDragAndDropper extends Application {
         container.getChildren().add(e2);
         container.getChildren().add(new Label("+"));
         container.getChildren().add(e3);
-        root.getChildren().add(container);
+        //root.getChildren().add(container);
+
+        try {
+            ExpressionParser parse = new SimpleExpressionParser();
+            Expression ex = parse.parse("(8*5*4)+9+10", true);
+            Expression eCopy = ex.deepCopy();
+            root.getChildren().add(ex.getNode());
+            ex.getNode().setLayoutX(10);
+            root.getChildren().add(eCopy.getNode());
+            eCopy.getNode().setLayoutX(100);
+            int i = 0;
+        }
+        catch(ExpressionParseException e) {
+            System.out.println((e.getMessage()));
+
+        }
+
+
         final MouseEventHandler handler = new MouseEventHandler(e1);
         c1.setOnMousePressed(handler);
         c1.setOnMouseDragged(handler);

@@ -76,7 +76,7 @@ public class KiraExpressionEditor extends Application {
     /**
      * Initial expression shown in the textbox
      */
-    private static final String EXAMPLE_EXPRESSION = "2+3+(4*3)";
+    private static final String EXAMPLE_EXPRESSION = "2+3";
 
     /**
      * Parser used for parsing expressions.
