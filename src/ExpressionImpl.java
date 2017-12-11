@@ -139,6 +139,10 @@ public class ExpressionImpl implements Expression {
             final int leftIndex = currentIndex - 2;
             final int rightIndex = currentIndex + 2;
 
+            final int expressionIndex = (int) currentIndex / 2;
+            final int leftExpressionIndex = expressionIndex - 1;
+            final int rightExpressionIndex = expressionIndex + 1;
+
             final double currentX = mNode.getLayoutX();
             double leftWidth = 0;
             double leftX = currentX;
@@ -159,6 +163,7 @@ public class ExpressionImpl implements Expression {
                 leftX = currentCase.get(leftIndex).getLayoutX();
                 if (Math.abs(x - leftX) < Math.abs(x - currentX)) {
                     p.getChildren().setAll(leftCase);
+                    swapSubexpressions(expressionIndex, leftExpressionIndex);
                     return;
                 }
                 leftWidth = ((Region)currentCase.get(leftIndex)).getWidth();
@@ -172,6 +177,7 @@ public class ExpressionImpl implements Expression {
                 final double rightX = leftX + leftWidth + operatorWidth + rightWidth + operatorWidth;
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
                     p.getChildren().setAll(rightCase);
+                    swapSubexpressions(expressionIndex, rightExpressionIndex);
                     return;
                 }
             }
