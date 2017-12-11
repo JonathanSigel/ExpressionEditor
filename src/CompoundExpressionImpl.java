@@ -1,7 +1,9 @@
 import javafx.collections.FXCollections;
+import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Region;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -140,5 +142,27 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         for (Expression child : mChildren) {
             ((ExpressionImpl) child).flattenNodes();
         }
+    }
+
+    @Override
+    public Expression focus(double x, double y, CompoundExpression rootExpression) {
+
+        //((HBox)mNode).setBorder(NO_BORDER);
+
+        for(Expression child : mChildren) {
+
+            Bounds boundsInScene = child.getNode().localToScene(child.getNode().getBoundsInLocal());
+
+            final double xMin = boundsInScene.getMinX();
+            final double xMax = boundsInScene.getMaxX();
+            final double yMin = boundsInScene.getMinY();
+            final double yMax = boundsInScene.getMaxY();
+
+            if (((x <= xMax) && (x >= xMin)) && ((y <= yMax) && (y >= yMin))) {
+                ((HBox)child.getNode()).setBorder(RED_BORDER);
+                return child;
+            }
+        }
+        return rootExpression;
     }
 }

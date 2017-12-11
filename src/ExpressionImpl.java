@@ -187,4 +187,8 @@ public class ExpressionImpl implements Expression {
     private void swapSubexpressions(int currentIndex, int swapIndex) {
         Collections.swap(((CompoundExpressionImpl) mParent).getSubexpressions(), currentIndex, swapIndex);
     }
+
+    public Expression focus(double x, double y, CompoundExpression rootExpression) {
+        return rootExpression;
+    }
 }

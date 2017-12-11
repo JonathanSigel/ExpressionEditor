@@ -27,16 +27,28 @@ public class KiraExpressionEditor extends Application {
      */
     private static class MouseEventHandler implements EventHandler<MouseEvent> {
 
-        private CompoundExpression mRootExpression;
+        Pane mPane;
+        CompoundExpression mRootExpression;
+        Expression mFocusedExpression;
+        Expression mCopyExpression;
+        double mLastX;
+        double mLastY;
 
-        MouseEventHandler (CompoundExpression rootExpression) {
+        MouseEventHandler (Pane pane, CompoundExpression rootExpression) {
+            mPane = pane;
             mRootExpression = rootExpression;
+            mFocusedExpression = rootExpression;
+            mCopyExpression = null;
         }
 
         public void handle (MouseEvent event) {
 
-            if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+            final double x = event.getSceneX();
+            final double y = event.getSceneY();
 
+            if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+                ((HBox)mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
+                mFocusedExpression = ((ExpressionImpl)mFocusedExpression).focus(x, y, mRootExpression);
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
@@ -53,7 +65,7 @@ public class KiraExpressionEditor extends Application {
     /**
      * Initial expression shown in the textbox
      */
-    private static final String EXAMPLE_EXPRESSION = "2";
+    private static final String EXAMPLE_EXPRESSION = "2+3+(4*3)";
 
     /**
      * Parser used for parsing expressions.
@@ -88,7 +100,7 @@ public class KiraExpressionEditor extends Application {
                     // If the parsed expression is a CompoundExpression, then register some callbacks
                     if (expression instanceof CompoundExpression) {
                         ((Pane) expression.getNode()).setBorder(Expression.NO_BORDER);
-                        final MouseEventHandler eventHandler = new MouseEventHandler((CompoundExpression) expression);
+                        final MouseEventHandler eventHandler = new MouseEventHandler(expressionPane, (CompoundExpression) expression);
                         expressionPane.setOnMousePressed(eventHandler);
                         expressionPane.setOnMouseDragged(eventHandler);
                         expressionPane.setOnMouseReleased(eventHandler);
