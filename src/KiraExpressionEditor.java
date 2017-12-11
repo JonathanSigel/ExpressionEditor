@@ -59,6 +59,7 @@ public class KiraExpressionEditor extends Application {
                 mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
                 ((ExpressionImpl)mFocusedExpression).swap(x);
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+                mPane.getChildren().remove(mCopyExpression.getNode());
                 mCopyExpression = null;
             }
 
