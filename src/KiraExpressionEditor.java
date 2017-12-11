@@ -26,13 +26,21 @@ public class KiraExpressionEditor extends Application {
      * Mouse event handler for the entire pane that constitutes the ExpressionEditor
      */
     private static class MouseEventHandler implements EventHandler<MouseEvent> {
-        MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
+
+        private CompoundExpression mRootExpression;
+
+        MouseEventHandler (CompoundExpression rootExpression) {
+            mRootExpression = rootExpression;
         }
 
         public void handle (MouseEvent event) {
+
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+
             }
         }
     }
@@ -80,7 +88,7 @@ public class KiraExpressionEditor extends Application {
                     // If the parsed expression is a CompoundExpression, then register some callbacks
                     if (expression instanceof CompoundExpression) {
                         ((Pane) expression.getNode()).setBorder(Expression.NO_BORDER);
-                        final MouseEventHandler eventHandler = new MouseEventHandler(expressionPane, (CompoundExpression) expression);
+                        final MouseEventHandler eventHandler = new MouseEventHandler((CompoundExpression) expression);
                         expressionPane.setOnMousePressed(eventHandler);
                         expressionPane.setOnMouseDragged(eventHandler);
                         expressionPane.setOnMouseReleased(eventHandler);

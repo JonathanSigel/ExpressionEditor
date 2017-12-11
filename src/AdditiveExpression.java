@@ -1,3 +1,6 @@
+import javafx.scene.Node;
+import javafx.scene.layout.HBox;
+
 public class AdditiveExpression extends OperationExpression {
 
     /**
@@ -5,5 +8,9 @@ public class AdditiveExpression extends OperationExpression {
      */
     public AdditiveExpression() {
         super("+");
+    }
+
+    public AdditiveExpression(Node initialNode) {
+        super("+", initialNode);
     }
 }

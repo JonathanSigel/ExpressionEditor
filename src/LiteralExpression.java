@@ -1,4 +1,6 @@
+import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.layout.HBox;
 
 public class LiteralExpression extends ExpressionImpl {
 
@@ -8,5 +10,9 @@ public class LiteralExpression extends ExpressionImpl {
      */
     public LiteralExpression(String representation) {
         super(representation);
+    }
+
+    public LiteralExpression(String representation, Node nodeRepresentation) {
+        super(representation, nodeRepresentation);
     }
 }

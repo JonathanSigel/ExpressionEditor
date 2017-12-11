@@ -1,3 +1,4 @@
+import javafx.collections.FXCollections;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
@@ -16,6 +17,11 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     protected CompoundExpressionImpl(String representation) {
         super(representation);
+        mChildren = new ArrayList<Expression>();
+    }
+
+    protected CompoundExpressionImpl(String representation, Node nodeRepresentation) {
+        super(representation, nodeRepresentation);
         mChildren = new ArrayList<Expression>();
     }
 
@@ -48,13 +54,38 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     @Override
     public Expression deepCopy() {
-        final CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
+        CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
+
+        if (mNode != null) {
+            copy = new CompoundExpressionImpl(new String(mRep), copyNode());
+        }
 
         for (Expression child : mChildren) {
             copy.addSubexpression(child.deepCopy());
         }
 
         return copy;
+    }
+
+    @Override
+    public Node copyNode() {
+        List<Node> copyChildren = FXCollections.observableArrayList(((HBox)mNode).getChildren());
+        List<Node> newChildren = new ArrayList<Node>();
+
+        for(Node child : copyChildren) {
+            int index = 0;
+            if (child instanceof Label) {
+                newChildren.add(new Label(new String(((Label) child).getText())));
+            } else {
+                newChildren.add(((ExpressionImpl)mChildren.get(index)).copyNode());
+                index++;
+            }
+        }
+
+        HBox copyNode = new HBox();
+        copyNode.getChildren().addAll(newChildren);
+
+        return copyNode;
     }
 
     /**

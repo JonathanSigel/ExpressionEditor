@@ -15,6 +15,10 @@ public class OperationExpression extends CompoundExpressionImpl {
         super(representation);
     }
 
+    protected OperationExpression(String representation, Node nodeRepresentation) {
+        super(representation, nodeRepresentation);
+    }
+
     /**
      * Recursively flattens the expression as much as possible
      * throughout the entire tree. Specifically, in every multiplicative

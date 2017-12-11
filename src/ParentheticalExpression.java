@@ -11,4 +11,7 @@ public class ParentheticalExpression extends CompoundExpressionImpl {
         super("()");
     }
 
+    public ParentheticalExpression(Node initialNode) {
+        super("()", initialNode);
+    }
 }

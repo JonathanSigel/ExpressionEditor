@@ -1,6 +1,11 @@
+import javafx.collections.FXCollections;
 import javafx.scene.Node;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ExpressionImpl implements Expression {
 
@@ -15,7 +20,18 @@ public class ExpressionImpl implements Expression {
     protected ExpressionImpl(String representation) {
         mParent = null;
         mRep = representation;
-        mNode = new HBox();
+        mNode = null;
+    }
+
+    /**
+     * Implementation of the Expression Interface. Superclass for all types of expressions.
+     * @param representation a string representing the expression or its type
+     * @param nodeRepresentation a node that is the JavaFX representation of the expression
+     */
+    protected ExpressionImpl(String representation, Node nodeRepresentation){
+        mParent = null;
+        mRep = representation;
+        mNode = nodeRepresentation;
     }
 
     /**
@@ -42,7 +58,20 @@ public class ExpressionImpl implements Expression {
      * @return the deep copy
      */
     public Expression deepCopy() {
-        return new ExpressionImpl(new String(mRep));
+
+        if(mNode == null) {
+            return new ExpressionImpl(new String(mRep));
+        }
+
+        return new ExpressionImpl(new String(mRep), copyNode());
+    }
+
+    protected Node copyNode() {
+        HBox copy = new HBox();
+        Node oldLabel = ((HBox) mNode).getChildren().get(0);
+        copy.getChildren().add(new Label(((Label)oldLabel).getText()));
+
+        return copy;
     }
 
     /**
@@ -52,6 +81,10 @@ public class ExpressionImpl implements Expression {
      */
     public Node getNode() {
         return mNode;
+    }
+
+    public void setNode(Node newNode) {
+        mNode = newNode;
     }
 
     /**

@@ -62,7 +62,11 @@ public class SimpleExpressionParser implements ExpressionParser {
                 final Expression subExpression2 = parseE(subString2, withJavaFXControls);
                 //if both subexpressions are able to be parsed, create new compound expression and add the two subexpressions to it
                 if (subExpression2 != null) {
-                    final CompoundExpression addExpression = new AdditiveExpression();
+                    CompoundExpression addExpression = new AdditiveExpression();
+
+                    if (withJavaFXControls)
+                        addExpression = new AdditiveExpression(new HBox());
+
                     addExpression.addSubexpression(subExpression1);
                     addExpression.addSubexpression(subExpression2);
 
@@ -110,7 +114,11 @@ public class SimpleExpressionParser implements ExpressionParser {
                 final Expression subExpression2 = parseM(subString2, withJavaFXControls);
                 //if both subexpressions are able to be parsed, create new compound expression and add the two subexpressions to it
                 if (subExpression2 != null) {
-                    final CompoundExpression multExpression = new MultiplicativeExpression();
+                    CompoundExpression multExpression = new MultiplicativeExpression();
+
+                    if (withJavaFXControls)
+                        multExpression = new MultiplicativeExpression(new HBox());
+
                     multExpression.addSubexpression(subExpression1);
                     multExpression.addSubexpression(subExpression2);
 
@@ -155,7 +163,11 @@ public class SimpleExpressionParser implements ExpressionParser {
                 final Expression subExpression = parseE(subString, withJavaFXControls);
                 //if subexpression is able to be parsed, create new compound expression and add the subexpression to it
                 if (subExpression != null) {
-                    final CompoundExpression parenExpression = new ParentheticalExpression();
+                    CompoundExpression parenExpression = new ParentheticalExpression();
+
+                    if (withJavaFXControls)
+                        parenExpression = new ParentheticalExpression(new HBox());
+
                     parenExpression.addSubexpression(subExpression);
 
                     //also parses into node
@@ -187,23 +199,13 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         Expression literal = null;
 
-        // checks numbers
-        if (str.matches("[0-9]+")) {
+        // checks numbers and letters
+        if (str.matches("[0-9]+|[a-z]")) {
             literal = new LiteralExpression(str);
 
             //also parses into node
             if (withJavaFXControls) {
-                ((HBox)literal.getNode()).getChildren().add(new Label(str));
-            }
-        }
-
-        // checks letters
-        if (str.matches("[a-z]")) {
-            literal = new LiteralExpression(str);
-
-            //also parses into node
-            if (withJavaFXControls) {
-                ((HBox)literal.getNode()).getChildren().add(new Label(str));
+                literal = new LiteralExpression(str, new HBox(new Label(str)));
             }
         }
 

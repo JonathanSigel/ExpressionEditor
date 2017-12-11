@@ -111,6 +111,9 @@ public class KiraDragAndDropper extends Application {
         final HBox container = new HBox();
         final Label e1 = new Label("e1");
         final Label e2 = new Label("e2");
+        final Label e0 = new Label("e0");
+        container.getChildren().add(e0);
+        container.getChildren().add(new Label("+"));
         container.getChildren().add(e1);
         container.getChildren().add(new Label("+"));
         container.getChildren().add(e2);
