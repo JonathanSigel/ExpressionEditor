@@ -178,7 +178,7 @@ public class ExpressionImpl implements Expression {
                 Collections.swap(rightCase, currentIndex, rightIndex);
 
                 Bounds rightBoundsInScene = ((HBox)p).getChildren().get(rightIndex).localToScene(((HBox)p).getChildren().get(rightIndex).getBoundsInLocal());
-                
+
                 final double rightX = leftX + leftWidth + operatorWidth + rightBoundsInScene.getWidth() + operatorWidth;
 
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
