@@ -107,22 +107,22 @@ public class KiraDragAndDropper extends Application {
         final Pane root = new Pane();
         final HBox container = new HBox();
         final Label e1 = new Label("e1");
+        final HBox c1 = new HBox(e1);
         final Label e2 = new Label("e2");
         final Label e0 = new Label("e0");
         final Label e3 = new Label("e3");
         container.getChildren().add(e0);
         container.getChildren().add(new Label("+"));
-        container.getChildren().add(e1);
+        container.getChildren().add(c1);
         container.getChildren().add(new Label("+"));
         container.getChildren().add(e2);
         container.getChildren().add(new Label("+"));
         container.getChildren().add(e3);
         root.getChildren().add(container);
-        container.setLayoutX(50);
         final MouseEventHandler handler = new MouseEventHandler(e1);
-        e1.setOnMousePressed(handler);
-        e1.setOnMouseDragged(handler);
-        e1.setOnMouseReleased(handler);
+        c1.setOnMousePressed(handler);
+        c1.setOnMouseDragged(handler);
+        c1.setOnMouseReleased(handler);
         primaryStage.setScene(new Scene(root, 600, 480));
         primaryStage.show();
     }

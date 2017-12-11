@@ -49,11 +49,21 @@ public class KiraExpressionEditor extends Application {
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
                 ((HBox)mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
                 mFocusedExpression = ((ExpressionImpl)mFocusedExpression).focus(x, y, mRootExpression);
+                mCopyExpression = mFocusedExpression.deepCopy();
+                mPane.getChildren().add(mCopyExpression.getNode());
+                mCopyExpression.getNode().setLayoutX(x);
+                mCopyExpression.getNode().setLayoutY(y);
+
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-
+                mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
+                mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
+                ((ExpressionImpl)mFocusedExpression).swap(x);
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-
+                mCopyExpression = null;
             }
+
+            mLastX = x;
+            mLastY = y;
         }
     }
 
