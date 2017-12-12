@@ -79,23 +79,22 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     @Override
     public Pane copyNode() {
-        List<Node> copyChildren = FXCollections.observableArrayList(((HBox)mNode).getChildren());
         List<Node> newChildren = new ArrayList<Node>();
 
         int index = 0;
-        for(Node child : copyChildren) {
+        for(Node child : mNode.getChildren()) {
             if (child instanceof Label) {
+                //if its a label, create a copy and add to list of children to be added
                 Labeled toAdd = new Label(new String(((Label) child).getText()));
                 newChildren.add(toAdd);
             } else {
+                //otherwise its an HBox representing an expression, so call this method on the corresponding expression
                 newChildren.add(((ExpressionImpl)mChildren.get(index)).copyNode());
                 index++;
             }
         }
-
         Pane copyNode = new HBox();
         copyNode.getChildren().addAll(newChildren);
-
         return copyNode;
     }
 

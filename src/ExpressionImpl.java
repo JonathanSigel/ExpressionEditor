@@ -145,23 +145,28 @@ public class ExpressionImpl implements Expression {
     public void swap(double x) {
         if (mParent != null && mNode != null) {
             final Pane p = (Pane) mNode.getParent();
+            //makes a copy of the node's parent's children
             List<Node> currentCase = FXCollections.observableArrayList(p.getChildren());
 
             final int currentIndex = currentCase.indexOf(mNode);
-            // 2 so as to skip over operation labels
+            //+- 2 so as to skip over operation labels
             final int leftIndex = currentIndex - 2;
             final int rightIndex = currentIndex + 2;
 
+            //finding index in expression's parent's children
             final int expressionIndex = (int) currentIndex / 2;
             final int leftExpressionIndex = expressionIndex - 1;
             final int rightExpressionIndex = expressionIndex + 1;
 
+            //determining coordinates in scene
             Bounds currentBoundsInScene = mNode.localToScene(mNode.getBoundsInLocal());
             final double currentX = currentBoundsInScene.getMinX();
+            //if there is no sibling to the left, then the farthest leftwards x coordinate would be that of this expression's JavaFX node
             double leftX = currentX;
             double leftWidth = 0;
             double operatorWidth = 0;
 
+            //determining width of labels representing operations
             if (currentCase.size() > 0) {
                 if (currentIndex == 0) {
                     operatorWidth = ((Region)currentCase.get(1)).getWidth();
@@ -169,32 +174,35 @@ public class ExpressionImpl implements Expression {
                     operatorWidth = ((Region)currentCase.get(currentCase.size() - 2)).getWidth();
                 }
             }
-
-            List<Node> leftCase = FXCollections.observableArrayList(p.getChildren());
+            //checking if this expression and its JavaFX node should be swapped with its sibling to the left
+            //first make sure there is a sibling to the left
             if (leftIndex >= 0) {
-                Collections.swap(leftCase, currentIndex, leftIndex);
-
                 Bounds leftBoundsInScene = p.getChildren().get(leftIndex).localToScene(p.getChildren().get(leftIndex).getBoundsInLocal());
+                //if the node of this expression was to be in the left position,
+                // then its x coordinate would be that of the leftwards sibling
                 leftX = leftBoundsInScene.getMinX();
                 leftWidth = leftBoundsInScene.getWidth();
 
                 if (Math.abs(x - leftX) < Math.abs(x - currentX)) {
-                    p.getChildren().setAll(leftCase);
+                    Collections.swap(currentCase, currentIndex, leftIndex);
+                    p.getChildren().setAll(currentCase);
+                    //also swaps the expression itself, not just its JavaFX node
                     swapSubexpressions(expressionIndex, leftExpressionIndex);
                     return;
                 }
             }
-
-            List<Node> rightCase = FXCollections.observableArrayList(p.getChildren());
-            if (rightIndex < rightCase.size()) {
-                Collections.swap(rightCase, currentIndex, rightIndex);
-
+            //checking if this expression and its JavaFX node should be swapped with its sibling to the right
+            //first make sure there is a sibling to the right
+            if (rightIndex < currentCase.size()) {
                 Bounds rightBoundsInScene = p.getChildren().get(rightIndex).localToScene(p.getChildren().get(rightIndex).getBoundsInLocal());
-
+                //if the node of this expression was to be in the right position,
+                // then its x coordinate would be the coordinate of the left sibling, the width of the left sibling, the width of this expression's node, and the width of any labels in place for operator symbols
                 final double rightX = leftX + leftWidth + operatorWidth + rightBoundsInScene.getWidth() + operatorWidth;
 
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
-                    p.getChildren().setAll(rightCase);
+                    Collections.swap(currentCase, currentIndex, rightIndex);
+                    p.getChildren().setAll(currentCase);
+                    //also swaps the expression itself, not just its JavaFX node
                     swapSubexpressions(expressionIndex, rightExpressionIndex);
                     return;
                 }
