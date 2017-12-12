@@ -1,5 +1,6 @@
 import javafx.scene.Node;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class MultiplicativeExpression extends OperationExpression {
 
@@ -10,7 +11,7 @@ public class MultiplicativeExpression extends OperationExpression {
         super("·");
     }
 
-    public MultiplicativeExpression(Node initialNode) {
+    public MultiplicativeExpression(Pane initialNode) {
         super("·", initialNode);
     }
 }

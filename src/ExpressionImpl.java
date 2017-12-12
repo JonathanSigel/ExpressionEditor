@@ -2,21 +2,29 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Control;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import javafx.scene.paint.Color;
 
 public class ExpressionImpl implements Expression {
 
     protected CompoundExpression mParent;
     protected String mRep;
-    protected Node mNode;
+    // is an Pane instead of a Node because it is essential to be able to access its children,
+    // and Pane is the highest superclass with that functionality
+    protected Pane mNode;
+    protected Color mTextColor;
 
     /**
      * Implementation of the Expression Interface. Superclass for all types of expressions.
@@ -31,9 +39,9 @@ public class ExpressionImpl implements Expression {
     /**
      * Implementation of the Expression Interface. Superclass for all types of expressions.
      * @param representation a string representing the expression or its type
-     * @param nodeRepresentation a node that is the JavaFX representation of the expression
+     * @param nodeRepresentation a Pane that is the JavaFX representation of the expression
      */
-    protected ExpressionImpl(String representation, Node nodeRepresentation){
+    protected ExpressionImpl(String representation, Pane nodeRepresentation){
         mParent = null;
         mRep = representation;
         mNode = nodeRepresentation;
@@ -71,13 +79,16 @@ public class ExpressionImpl implements Expression {
         return new ExpressionImpl(new String(mRep), copyNode());
     }
 
-    protected Node copyNode() {
-        HBox copy = new HBox();
-        Node oldLabel = ((HBox) mNode).getChildren().get(0);
-        Label toAdd = new Label(((Label)oldLabel).getText());
-        toAdd.setFont(Font.font ("Verdana", 28));
+    /**
+     * Creates and returns a deep copy of the JavaFX node representing the expression
+     * Should be overridden for compound expressions so as to also deep copy the children of the node
+     * @return a Pane which is the deep copy of the expression's JavaFX node
+     */
+    protected Pane copyNode() {
+        Pane copy = new HBox();
+        Labeled oldLabel = (Labeled) mNode.getChildren().get(0);
+        Labeled toAdd = new Label((oldLabel).getText());
         copy.getChildren().add(toAdd);
-
         return copy;
     }
 
@@ -90,7 +101,11 @@ public class ExpressionImpl implements Expression {
         return mNode;
     }
 
-    public void setNode(Node newNode) {
+    /**
+     * Sets the JavaFX node associated with this expression.
+     * @param newNode the Pane to set the JavaFX node to
+     */
+    protected void setNode(Pane newNode) {
         mNode = newNode;
     }
 
@@ -130,7 +145,7 @@ public class ExpressionImpl implements Expression {
      * In the case of a literal it will be the number or letter.
      * @return the type or string representation
      */
-    public String getType() {
+    protected String getType() {
         return mRep;
     }
 
@@ -195,10 +210,21 @@ public class ExpressionImpl implements Expression {
     }
 
     private void swapSubexpressions(int currentIndex, int swapIndex) {
-        Collections.swap(((CompoundExpressionImpl) mParent).getSubexpressions(), currentIndex, swapIndex);
+        Collections.swap(mParent.getSubexpressions(), currentIndex, swapIndex);
     }
 
+    /**
+     * Focuses on the subexpression at scene coordinates (x,y)
+     * If no subexpression is clicked, lor no subexpression exists, returns null
+     * @param x scene x coordinate
+     * @param y scene y coordinate
+     * @return the new focused Expression
+     */
     public Expression focus(double x, double y) {
         return null;
+    }
+
+    public void setColor(Color c) {
+        ((Labeled)mNode.getChildren().get(0)).setTextFill(c);
     }
 }

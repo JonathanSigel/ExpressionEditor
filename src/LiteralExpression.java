@@ -1,6 +1,7 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class LiteralExpression extends ExpressionImpl {
 
@@ -12,7 +13,7 @@ public class LiteralExpression extends ExpressionImpl {
         super(representation);
     }
 
-    public LiteralExpression(String representation, Node nodeRepresentation) {
+    public LiteralExpression(String representation, Pane nodeRepresentation) {
         super(representation, nodeRepresentation);
     }
 }

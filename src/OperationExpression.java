@@ -1,6 +1,8 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +17,7 @@ public class OperationExpression extends CompoundExpressionImpl {
         super(representation);
     }
 
-    protected OperationExpression(String representation, Node nodeRepresentation) {
+    protected OperationExpression(String representation, Pane nodeRepresentation) {
         super(representation, nodeRepresentation);
     }
 
@@ -67,26 +69,24 @@ public class OperationExpression extends CompoundExpressionImpl {
     }
 
     private void flattenSelfNode() {
-        ((HBox) mNode).getChildren().clear();
+        mNode.getChildren().clear();
 
         for (Expression existingChild: mChildren) {
             // first cast as an ExpressionImpl to use the getType method since it could be a literal
             if (((ExpressionImpl)existingChild).getType() == mRep) {
-                final List<Node> nodesToAdd = ((HBox)existingChild.getNode()).getChildren();
-                ((HBox) mNode).getChildren().addAll(nodesToAdd);
-                Label toAdd = new Label(mRep);
-                toAdd.setFont(Font.font ("Verdana", 28));
-                ((HBox) mNode).getChildren().add(toAdd);
+                final List<Node> nodesToAdd = ((Pane)existingChild.getNode()).getChildren();
+                mNode.getChildren().addAll(nodesToAdd);
+                Labeled toAdd = new Label(mRep);
+                mNode.getChildren().add(toAdd);
             }
             else{
-                ((HBox) mNode).getChildren().add(existingChild.getNode());
-                Label toAdd = new Label(mRep);
-                toAdd.setFont(Font.font ("Verdana", 28));
-                ((HBox) mNode).getChildren().add(toAdd);
+                mNode.getChildren().add(existingChild.getNode());
+                Labeled toAdd = new Label(mRep);
+                mNode.getChildren().add(toAdd);
             }
         }
 
         //removes last additional operation sign
-        ((HBox) mNode).getChildren().remove(((HBox) mNode).getChildren().size()-1, ((HBox) mNode).getChildren().size());
+        mNode.getChildren().remove( mNode.getChildren().size()-1, mNode.getChildren().size());
     }
 }

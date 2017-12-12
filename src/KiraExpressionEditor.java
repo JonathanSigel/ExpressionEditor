@@ -17,6 +17,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.event.EventHandler;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class KiraExpressionEditor extends Application {
@@ -55,6 +56,7 @@ public class KiraExpressionEditor extends Application {
                     if (mCopyExpression == null) {
 
                         mCopyExpression = mFocusedExpression.deepCopy();
+                        ((ExpressionImpl)mFocusedExpression).setColor(Expression.GHOST_COLOR);
                         mPane.getChildren().add(mCopyExpression.getNode());
 
                         Bounds originalBounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
@@ -62,9 +64,6 @@ public class KiraExpressionEditor extends Application {
 
                         mCopyExpression.getNode().setLayoutX(originalBounds.getMinX() - copyBounds.getMinX());
                         mCopyExpression.getNode().setLayoutY(originalBounds.getMinY()- copyBounds.getMinY());
-
-
-                        int i = 0;
                     }
 
                     mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
@@ -82,6 +81,7 @@ public class KiraExpressionEditor extends Application {
                         mFocusedExpression = ((ExpressionImpl) mFocusedExpression).focus(x, y);
                     }
                 } else {
+                    ((ExpressionImpl)mFocusedExpression).setColor(Color.BLACK);
                     mPane.getChildren().remove(mCopyExpression.getNode());
                     mCopyExpression = null;
                 }

@@ -1,6 +1,7 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 public class ParentheticalExpression extends CompoundExpressionImpl {
 
@@ -11,7 +12,7 @@ public class ParentheticalExpression extends CompoundExpressionImpl {
         super("()");
     }
 
-    public ParentheticalExpression(Node initialNode) {
+    public ParentheticalExpression(Pane initialNode) {
         super("()", initialNode);
     }
 }

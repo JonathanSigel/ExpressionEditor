@@ -2,8 +2,12 @@ import javafx.collections.FXCollections;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +18,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     /**
      * Implementation of the CompoundExpression Interface. Superclass for all types of expressions with children.
-     *
      * @param representation a string representing the type of expression (as in "()", "+", or "·")
      */
     protected CompoundExpressionImpl(String representation) {
@@ -22,7 +25,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         mChildren = new ArrayList<Expression>();
     }
 
-    protected CompoundExpressionImpl(String representation, Node nodeRepresentation) {
+    protected CompoundExpressionImpl(String representation, Pane nodeRepresentation) {
         super(representation, nodeRepresentation);
         mChildren = new ArrayList<Expression>();
     }
@@ -56,7 +59,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
      */
     @Override
     public Expression deepCopy() {
-        CompoundExpressionImpl copy = new CompoundExpressionImpl(new String(mRep));
+        CompoundExpression copy = new CompoundExpressionImpl(new String(mRep));
 
         if (mNode != null) {
             copy = new CompoundExpressionImpl(new String(mRep), copyNode());
@@ -70,21 +73,22 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     @Override
-    public Node copyNode() {
+    public Pane copyNode() {
         List<Node> copyChildren = FXCollections.observableArrayList(((HBox)mNode).getChildren());
         List<Node> newChildren = new ArrayList<Node>();
 
         int index = 0;
         for(Node child : copyChildren) {
             if (child instanceof Label) {
-                newChildren.add(new Label(new String(((Label) child).getText())));
+                Labeled toAdd = new Label(new String(((Label) child).getText()));
+                newChildren.add(toAdd);
             } else {
                 newChildren.add(((ExpressionImpl)mChildren.get(index)).copyNode());
                 index++;
             }
         }
 
-        HBox copyNode = new HBox();
+        Pane copyNode = new HBox();
         copyNode.getChildren().addAll(newChildren);
 
         return copyNode;
@@ -149,7 +153,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
         for(Expression child : mChildren) {
 
-            Bounds boundsInScene = child.getNode().localToScene(child.getNode().getBoundsInLocal());
+            final Bounds boundsInScene = child.getNode().localToScene(child.getNode().getBoundsInLocal());
 
             final double xMin = boundsInScene.getMinX();
             final double xMax = boundsInScene.getMaxX();
@@ -157,10 +161,23 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
             final double yMax = boundsInScene.getMaxY();
 
             if (((x <= xMax) && (x >= xMin)) && ((y <= yMax) && (y >= yMin))) {
-                ((HBox)child.getNode()).setBorder(RED_BORDER);
+                ((Pane)child.getNode()).setBorder(RED_BORDER);
                 return child;
             }
         }
         return null;
+    }
+
+    @Override
+    public void setColor(Color c) {
+        int index = 0;
+        for(Node child : mNode.getChildren()) {
+            if (child instanceof Label) {
+                ((Label) child).setTextFill(c);
+            } else {
+                ((ExpressionImpl)mChildren.get(index)).setColor(c);
+                index++;
+            }
+        }
     }
 }
