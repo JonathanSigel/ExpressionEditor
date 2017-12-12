@@ -1,4 +1,3 @@
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 
@@ -29,10 +28,6 @@ public class SimpleExpressionParser implements ExpressionParser {
 
         // Flatten the expression before returning
         expression.flatten();
-
-        if(withJavaFXControls) {
-            ((ExpressionImpl)expression).flattenNodes();
-        }
 
         return expression;
     }

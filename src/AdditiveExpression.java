@@ -1,5 +1,3 @@
-import javafx.scene.Node;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 public class AdditiveExpression extends OperationExpression {
@@ -11,6 +9,9 @@ public class AdditiveExpression extends OperationExpression {
         super("+");
     }
 
+    /**
+     * An expression whose root is addition and who has a JavaFX node
+     */
     public AdditiveExpression(Pane initialNode) {
         super("+", initialNode);
     }

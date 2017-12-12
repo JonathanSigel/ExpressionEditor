@@ -5,9 +5,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.Region;
 import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +23,12 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         mChildren = new ArrayList<Expression>();
     }
 
+    /**
+     * Implementation of the CompoundExpression Interface in the case of having a non-null JavaFX node.
+     * Superclass for all types of expressions with children.
+     * @param representation a string representing the type of expression (as in "()", "+", or "·")
+     * @param nodeRepresentation a Pane that is the JavaFX representation of the expression
+     */
     protected CompoundExpressionImpl(String representation, Pane nodeRepresentation) {
         super(representation, nodeRepresentation);
         mChildren = new ArrayList<Expression>();
@@ -32,7 +36,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     /**
      * Adds the specified expression as a child and sets the child's parent to be this CompoundExpression.
-     *
      * @param subexpression the child expression to add
      */
     public void addSubexpression(Expression subexpression) {
@@ -43,7 +46,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     /**
      * Returns the list of the CompoundExpression's children.
-     *
      * @return list of children
      */
     public List<Expression> getSubexpressions() {
@@ -51,10 +53,9 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
-     * Creates and returns a deep copy of the expression.
+     * Creates and returns a deep copy of the expression and its JavaFX node if it has one
      * The entire tree rooted at the target node is copied, i.e.,
      * the copied Expression is as deep as possible.
-     *
      * @return the deep copy
      */
     @Override
@@ -72,6 +73,10 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         return copy;
     }
 
+    /**
+     * Creates and returns a deep copy of the JavaFX node representing the expression
+     * @return a Pane which is the deep copy of the expression's JavaFX node
+     */
     @Override
     public Pane copyNode() {
         List<Node> copyChildren = FXCollections.observableArrayList(((HBox)mNode).getChildren());
@@ -95,7 +100,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
-     * Recursively flattens the expression as much as possible throughout the entire tree.
+     * Recursively flattens the expression as much as possible throughout the entire tree, including the JavaFX nodes
      * Should be overridden for operation expressions so that in every multiplicative
      * or additive expression x whose first or last
      * child c is of the same type as x, the children of c will be added to x, and
@@ -105,13 +110,6 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     public void flatten() {
         flattenChildren();
     }
-
-    @Override
-    public void flattenNodes() {
-        flattenChildrenNodes();
-    }
-
-
 
     /**
      * Creates a String representation by recursively printing out (using indentation) the
@@ -142,12 +140,13 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         }
     }
 
-    protected void flattenChildrenNodes() {
-        for (Expression child : mChildren) {
-            ((ExpressionImpl) child).flattenNodes();
-        }
-    }
-
+    /**
+     * Focuses on the subexpression at scene coordinates (x,y)
+     * If no subexpression is clicked, lor no subexpression exists, returns null
+     * @param x scene x coordinate
+     * @param y scene y coordinate
+     * @return the new focused Expression
+     */
     @Override
     public Expression focus(double x, double y) {
 
@@ -168,6 +167,11 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
         return null;
     }
 
+    /**
+     * Changes color of the text in the expression's JavaFX node to given color
+     * Also recursively changes the color of all children's JavaFX nodes
+     * @param c the given color
+     */
     @Override
     public void setColor(Color c) {
         int index = 0;
@@ -175,7 +179,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
             if (child instanceof Label) {
                 ((Label) child).setTextFill(c);
             } else {
-                ((ExpressionImpl)mChildren.get(index)).setColor(c);
+                mChildren.get(index).setColor(c);
                 index++;
             }
         }

@@ -1,6 +1,3 @@
-import javafx.scene.Node;
-import javafx.scene.control.Label;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
 public class LiteralExpression extends ExpressionImpl {
@@ -13,6 +10,11 @@ public class LiteralExpression extends ExpressionImpl {
         super(representation);
     }
 
+    /**
+     * An expression which is a number or a letter and who has a JavaFX node
+     * @param representation the number or letter
+     * @param nodeRepresentation a Pane that is the JavaFX representation of the expression
+     */
     public LiteralExpression(String representation, Pane nodeRepresentation) {
         super(representation, nodeRepresentation);
     }

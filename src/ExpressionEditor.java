@@ -1,20 +1,16 @@
 import javafx.application.Application;
 import java.util.*;
-import javafx.geometry.Point2D;
-import javafx.scene.control.Label;
-import javafx.event.ActionEvent;
+
+import javafx.geometry.Bounds;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
-import javafx.event.EventHandler;
-import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ExpressionEditor extends Application {
@@ -26,32 +22,63 @@ public class ExpressionEditor extends Application {
 	 * Mouse event handler for the entire pane that constitutes the ExpressionEditor
 	 */
 	private static class MouseEventHandler implements EventHandler<MouseEvent> {
-		double _lastX, _lastY;
-		private Pane _expressionPane;
-		MouseEventHandler (Pane pane_, CompoundExpression rootExpression_) {
+
+		Pane mPane;
+		CompoundExpression mRootExpression;
+		Expression mFocusedExpression;
+		Expression mCopyExpression;
+		double mLastX;
+		double mLastY;
+
+		MouseEventHandler (Pane pane, CompoundExpression rootExpression) {
+			mPane = pane;
+			mRootExpression = rootExpression;
+			mFocusedExpression = null;
+			mCopyExpression = null;
 		}
 
 		public void handle (MouseEvent event) {
-			final double sceneX = event.getSceneX();
-			final double sceneY = event.getSceneY();
-			if (event.getEventType() ==
-					MouseEvent.MOUSE_PRESSED) {
-// IMPLEMENT ME
-			} else if (event.getEventType() ==
-					MouseEvent.MOUSE_DRAGGED) {
-				_expressionPane.setTranslateX(_expressionPane.getTranslateX() + (sceneX - _lastX));
-				_expressionPane.setTranslateY(_expressionPane.getTranslateY() + (sceneY - _lastY));
-			} else if (event.getEventType() ==
-					MouseEvent.MOUSE_RELEASED) {
-				_expressionPane.setLayoutX(_expressionPane.getLayoutX() +
-						_expressionPane.getTranslateX());
-				_expressionPane.setLayoutY(_expressionPane.getLayoutY() +
-						_expressionPane.getTranslateY());
-				_expressionPane.setTranslateX(0);
-				_expressionPane.setTranslateY(0);
+
+			final double x = event.getSceneX();
+			final double y = event.getSceneY();
+
+			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+				if (mFocusedExpression != null) {
+					if (mCopyExpression == null) {
+						mCopyExpression = mFocusedExpression.deepCopy();
+						mFocusedExpression.setColor(Expression.GHOST_COLOR);
+						mPane.getChildren().add(mCopyExpression.getNode());
+
+						Bounds originalBounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
+						Bounds copyBounds = mCopyExpression.getNode().localToScene(mCopyExpression.getNode().getBoundsInLocal());
+
+						mCopyExpression.getNode().setLayoutX(originalBounds.getMinX() - copyBounds.getMinX());
+						mCopyExpression.getNode().setLayoutY(originalBounds.getMinY()- copyBounds.getMinY());
+					}
+
+					mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
+					mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
+					mFocusedExpression.swap(x);
+				}
+			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
+
+				if (mCopyExpression == null) {
+					if (mFocusedExpression == null) {
+						mFocusedExpression = mRootExpression.focus(x, y);
+					} else {
+						((HBox) mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
+						mFocusedExpression = mFocusedExpression.focus(x, y);
+					}
+				} else {
+					mFocusedExpression.setColor(Color.BLACK);
+					mPane.getChildren().remove(mCopyExpression.getNode());
+					mCopyExpression = null;
+				}
 			}
-			_lastX = sceneX;
-			_lastY = sceneY;
+
+			mLastX = x;
+			mLastY = y;
 		}
 	}
 
@@ -63,7 +90,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Initial expression shown in the textbox
 	 */
-	private static final String EXAMPLE_EXPRESSION = "2*x+3*y+4*z+(7+6*z)";
+	private static final String EXAMPLE_EXPRESSION = "2+6*6+(9*7+8)";
 
 	/**
 	 * Parser used for parsing expressions.
@@ -117,6 +144,7 @@ public class ExpressionEditor extends Application {
 		final BorderPane root = new BorderPane();
 		root.setTop(queryPane);
 		root.setCenter(expressionPane);
+
 		primaryStage.setScene(new Scene(root, WINDOW_WIDTH, WINDOW_HEIGHT));
 		primaryStage.show();
 	}

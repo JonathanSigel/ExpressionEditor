@@ -50,11 +50,9 @@ public class KiraExpressionEditor extends Application {
             final double y = event.getSceneY();
 
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
                 if (mFocusedExpression != null) {
                     if (mCopyExpression == null) {
-
                         mCopyExpression = mFocusedExpression.deepCopy();
                         ((ExpressionImpl)mFocusedExpression).setColor(Expression.GHOST_COLOR);
                         mPane.getChildren().add(mCopyExpression.getNode());
@@ -70,7 +68,6 @@ public class KiraExpressionEditor extends Application {
                     mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
                     ((ExpressionImpl) mFocusedExpression).swap(x);
                 }
-
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
 
                 if (mCopyExpression == null) {
@@ -84,6 +81,7 @@ public class KiraExpressionEditor extends Application {
                     ((ExpressionImpl)mFocusedExpression).setColor(Color.BLACK);
                     mPane.getChildren().remove(mCopyExpression.getNode());
                     mCopyExpression = null;
+                    System.out.println(mRootExpression.convertToString(0));
                 }
             }
 
