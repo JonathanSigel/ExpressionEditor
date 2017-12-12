@@ -51,16 +51,21 @@ public class KiraExpressionEditor extends Application {
             if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-                if (mCopyExpression == null) {
-                    mCopyExpression = mFocusedExpression.deepCopy();
-                    mPane.getChildren().add(mCopyExpression.getNode());
-                    mCopyExpression.getNode().setLayoutX(x);
-                    mCopyExpression.getNode().setLayoutY(y);
+                if (mFocusedExpression != null) {
+                    if (mCopyExpression == null) {
+
+                        Bounds bounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
+
+                        mCopyExpression = mFocusedExpression.deepCopy();
+                        mPane.getChildren().add(mCopyExpression.getNode());
+                        mCopyExpression.getNode().setLayoutX(bounds.getMinX());
+                        mCopyExpression.getNode().setLayoutY(bounds.getMinY());
+                    }
+
+                    mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
+                    mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
+                    ((ExpressionImpl) mFocusedExpression).swap(x);
                 }
-                
-                mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
-                mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
-                ((ExpressionImpl)mFocusedExpression).swap(x);
 
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
 
