@@ -5,6 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.text.Font;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -73,7 +74,9 @@ public class ExpressionImpl implements Expression {
     protected Node copyNode() {
         HBox copy = new HBox();
         Node oldLabel = ((HBox) mNode).getChildren().get(0);
-        copy.getChildren().add(new Label(((Label)oldLabel).getText()));
+        Label toAdd = new Label(((Label)oldLabel).getText());
+        toAdd.setFont(Font.font ("Verdana", 28));
+        copy.getChildren().add(toAdd);
 
         return copy;
     }

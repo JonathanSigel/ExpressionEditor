@@ -1,7 +1,7 @@
 import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-
+import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,11 +74,15 @@ public class OperationExpression extends CompoundExpressionImpl {
             if (((ExpressionImpl)existingChild).getType() == mRep) {
                 final List<Node> nodesToAdd = ((HBox)existingChild.getNode()).getChildren();
                 ((HBox) mNode).getChildren().addAll(nodesToAdd);
-                ((HBox) mNode).getChildren().add(new Label(mRep));
+                Label toAdd = new Label(mRep);
+                toAdd.setFont(Font.font ("Verdana", 28));
+                ((HBox) mNode).getChildren().add(toAdd);
             }
             else{
                 ((HBox) mNode).getChildren().add(existingChild.getNode());
-                ((HBox) mNode).getChildren().add(new Label(mRep));
+                Label toAdd = new Label(mRep);
+                toAdd.setFont(Font.font ("Verdana", 28));
+                ((HBox) mNode).getChildren().add(toAdd);
             }
         }
 

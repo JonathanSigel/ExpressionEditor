@@ -53,6 +53,8 @@ public class WhatAWaste extends Application {
 		primaryStage.setTitle("EventDrivenProgram");
 		final Pane root = new Pane();
 		final Pane minipane1 = new Pane();
+		minipane1.setPrefSize(400,400);
+		final Pane minipane12 = new Pane();
 		minipane1.setPrefSize(200,200);
 		final HBox hbox = new HBox();
 		final HBox hbox2 = new HBox();
@@ -65,6 +67,8 @@ public class WhatAWaste extends Application {
 		root.getChildren().add(minipane1);
 		minipane1.getChildren().add(label);
 		minipane1.getChildren().add(label2);
+
+		//handlers
 		final MouseEventHandler handler = new
 				MouseEventHandler(label);
 		label.setOnMousePressed(handler);
@@ -80,12 +84,6 @@ public class WhatAWaste extends Application {
 		minipane1.setOnMousePressed(handler3);
 		minipane1.setOnMouseDragged(handler3);
 		minipane1.setOnMouseReleased(handler3);
-		//final MouseEventHandler handler3 = new
-		//		MouseEventHandler(minipane1);
-		//label2.setOnMousePressed(handler2);
-		//label2.setOnMouseDragged(handler2);
-		//label2.setOnMouseReleased(handler2);
-
 
 		primaryStage.setScene(new Scene(root, 600, 480));
 		primaryStage.show();
