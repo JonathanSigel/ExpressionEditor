@@ -1,5 +1,7 @@
 import javafx.application.Application;
 import java.util.*;
+
+import javafx.geometry.Bounds;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Label;
 import javafx.event.ActionEvent;
@@ -46,29 +48,33 @@ public class KiraExpressionEditor extends Application {
             final double x = event.getSceneX();
             final double y = event.getSceneY();
 
-            if (event.getEventType() == MouseEvent.MOUSE_PRESSED && mFocusedExpression == null) {
-                mFocusedExpression = ((ExpressionImpl)mRootExpression).focus(x, y);
-                mCopyExpression = mFocusedExpression.deepCopy();
-                mPane.getChildren().add(mCopyExpression.getNode());
-                mCopyExpression.getNode().setLayoutX(x);
-                mCopyExpression.getNode().setLayoutY(y);
-
-            } else if (event.getEventType() == MouseEvent.MOUSE_PRESSED && mFocusedExpression != null) {
-                ((HBox)mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
-                mFocusedExpression = ((ExpressionImpl)mFocusedExpression).focus(x, y);
-                mCopyExpression = mFocusedExpression.deepCopy();
-                mPane.getChildren().add(mCopyExpression.getNode());
-                mCopyExpression.getNode().setLayoutX(x);
-                mCopyExpression.getNode().setLayoutY(y);
+            if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 
             } else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+                if (mCopyExpression == null) {
+                    mCopyExpression = mFocusedExpression.deepCopy();
+                    mPane.getChildren().add(mCopyExpression.getNode());
+                    mCopyExpression.getNode().setLayoutX(x);
+                    mCopyExpression.getNode().setLayoutY(y);
+                }
+                
                 mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
                 mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
                 ((ExpressionImpl)mFocusedExpression).swap(x);
 
             } else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-                mPane.getChildren().remove(mCopyExpression.getNode());
-                mCopyExpression = null;
+
+                if (mCopyExpression == null) {
+                    if (mFocusedExpression == null) {
+                        mFocusedExpression = ((ExpressionImpl)mRootExpression).focus(x, y);
+                    } else {
+                        ((HBox) mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
+                        mFocusedExpression = ((ExpressionImpl) mFocusedExpression).focus(x, y);
+                    }
+                } else {
+                    mPane.getChildren().remove(mCopyExpression.getNode());
+                    mCopyExpression = null;
+                }
             }
 
             mLastX = x;
