@@ -14,7 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ExpressionEditor extends Application {
-	
+
 	public static void main (String[] args) {
 		launch(args);
 	}
@@ -103,7 +103,7 @@ public class ExpressionEditor extends Application {
 	/**
 	 * Initial expression shown in the textbox
 	 */
-	private static final String EXAMPLE_EXPRESSION = "2+6*6+(9*7+8)";
+	private static final String EXAMPLE_EXPRESSION = "2*x+3*y+4*z+(7+6*z)";
 
 	/**
 	 * Parser used for parsing expressions.
