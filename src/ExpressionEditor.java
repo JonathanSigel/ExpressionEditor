@@ -14,6 +14,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class ExpressionEditor extends Application {
+	
 	public static void main (String[] args) {
 		launch(args);
 	}
@@ -44,25 +45,20 @@ public class ExpressionEditor extends Application {
 
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
+				// so long as an expression is currently in focus...
 				if (mFocusedExpression != null) {
+					//if a copy does not exist, built it
 					if (mCopyExpression == null) {
-						mCopyExpression = mFocusedExpression.deepCopy();
-						mFocusedExpression.setColor(Expression.GHOST_COLOR);
-						mPane.getChildren().add(mCopyExpression.getNode());
-
-						Bounds originalBounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
-						Bounds copyBounds = mCopyExpression.getNode().localToScene(mCopyExpression.getNode().getBoundsInLocal());
-
-						mCopyExpression.getNode().setLayoutX(originalBounds.getMinX() - copyBounds.getMinX());
-						mCopyExpression.getNode().setLayoutY(originalBounds.getMinY()- copyBounds.getMinY());
+						buildCopy();
 					}
-
+					//drags around copy
 					mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
 					mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
+					//swaps focused expression accordingly
 					mFocusedExpression.swap(x);
 				}
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
-
+				//if there is currently no copy, then change focus
 				if (mCopyExpression == null) {
 					if (mFocusedExpression == null) {
 						mFocusedExpression = mRootExpression.focus(x, y);
@@ -71,6 +67,7 @@ public class ExpressionEditor extends Application {
 						mFocusedExpression = mFocusedExpression.focus(x, y);
 					}
 				} else {
+					//if there is a copy, set it down (aka set it to null and remove from pane)
 					mFocusedExpression.setColor(Color.BLACK);
 					mPane.getChildren().remove(mCopyExpression.getNode());
 					mCopyExpression = null;
@@ -79,6 +76,22 @@ public class ExpressionEditor extends Application {
 
 			mLastX = x;
 			mLastY = y;
+		}
+
+		/**
+		 * Copies the focused expression and puts the copy in the same location as the original
+		 */
+		private void buildCopy() {
+			mCopyExpression = mFocusedExpression.deepCopy();
+			//ghosts the focused expression
+			mFocusedExpression.setColor(Expression.GHOST_COLOR);
+			mPane.getChildren().add(mCopyExpression.getNode());
+
+			Bounds originalBounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
+			Bounds copyBounds = mCopyExpression.getNode().localToScene(mCopyExpression.getNode().getBoundsInLocal());
+
+			mCopyExpression.getNode().setLayoutX(originalBounds.getMinX() - copyBounds.getMinX());
+			mCopyExpression.getNode().setLayoutY(originalBounds.getMinY()- copyBounds.getMinY());
 		}
 	}
 
