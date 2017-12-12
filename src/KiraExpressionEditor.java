@@ -54,12 +54,17 @@ public class KiraExpressionEditor extends Application {
                 if (mFocusedExpression != null) {
                     if (mCopyExpression == null) {
 
-                        Bounds bounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
-
                         mCopyExpression = mFocusedExpression.deepCopy();
                         mPane.getChildren().add(mCopyExpression.getNode());
-                        mCopyExpression.getNode().setLayoutX(bounds.getMinX());
-                        mCopyExpression.getNode().setLayoutY(bounds.getMinY());
+
+                        Bounds originalBounds = mFocusedExpression.getNode().localToScene(mFocusedExpression.getNode().getBoundsInLocal());
+                        Bounds copyBounds = mCopyExpression.getNode().localToScene(mCopyExpression.getNode().getBoundsInLocal());
+
+                        mCopyExpression.getNode().setLayoutX(originalBounds.getMinX() - copyBounds.getMinX());
+                        mCopyExpression.getNode().setLayoutY(originalBounds.getMinY()- copyBounds.getMinY());
+
+
+                        int i = 0;
                     }
 
                     mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
