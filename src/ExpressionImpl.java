@@ -144,15 +144,17 @@ public class ExpressionImpl implements Expression {
      */
     public void swap(double x) {
         if (mParent != null && mNode != null) {
+            //casts to Pane so as to be able to use getChildren()
             final Pane p = (Pane) mNode.getParent();
             //makes a copy of the node's parent's children
             List<Node> currentCase = FXCollections.observableArrayList(p.getChildren());
-            //finding the index in the the JavaFX parent's children
+            //find the index of mNode in the the JavaFX parent's children
             final int currentIndex = currentCase.indexOf(mNode);
             //+- 2 so as to skip over operation labels
             final int leftIndex = currentIndex - 2;
             final int rightIndex = currentIndex + 2;
             //finding index in expression's parent's children
+            //divides by two because JavaFX parent's children will include operators and Expression parent's children won't
             final int expressionIndex = (int) currentIndex / 2;
             final int leftExpressionIndex = expressionIndex - 1;
             final int rightExpressionIndex = expressionIndex + 1;
@@ -208,8 +210,10 @@ public class ExpressionImpl implements Expression {
     private double computeOperatorWidth(List<Node> children, int currentIndex) {
         if (children.size() > 0) {
             if (currentIndex == 0) {
+                //then the next child must be an operator
                 return ((Region)children.get(1)).getWidth();
             } else {
+                //then second to last child must be an operator
                 return ((Region)children.get(children.size() - 2)).getWidth();
             }
         }
