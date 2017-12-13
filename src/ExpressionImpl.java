@@ -147,33 +147,22 @@ public class ExpressionImpl implements Expression {
             final Pane p = (Pane) mNode.getParent();
             //makes a copy of the node's parent's children
             List<Node> currentCase = FXCollections.observableArrayList(p.getChildren());
-
+            //finding the index in the the JavaFX parent's children
             final int currentIndex = currentCase.indexOf(mNode);
             //+- 2 so as to skip over operation labels
             final int leftIndex = currentIndex - 2;
             final int rightIndex = currentIndex + 2;
-
             //finding index in expression's parent's children
             final int expressionIndex = (int) currentIndex / 2;
             final int leftExpressionIndex = expressionIndex - 1;
             final int rightExpressionIndex = expressionIndex + 1;
-
             //determining coordinates in scene
             Bounds currentBoundsInScene = mNode.localToScene(mNode.getBoundsInLocal());
             final double currentX = currentBoundsInScene.getMinX();
             //if there is no sibling to the left, then the farthest leftwards x coordinate would be that of this expression's JavaFX node
             double leftX = currentX;
             double leftWidth = 0;
-            double operatorWidth = 0;
 
-            //determining width of labels representing operations
-            if (currentCase.size() > 0) {
-                if (currentIndex == 0) {
-                    operatorWidth = ((Region)currentCase.get(1)).getWidth();
-                } else {
-                    operatorWidth = ((Region)currentCase.get(currentCase.size() - 2)).getWidth();
-                }
-            }
             //checking if this expression and its JavaFX node should be swapped with its sibling to the left
             //first make sure there is a sibling to the left
             if (leftIndex >= 0) {
@@ -197,8 +186,8 @@ public class ExpressionImpl implements Expression {
                 Bounds rightBoundsInScene = p.getChildren().get(rightIndex).localToScene(p.getChildren().get(rightIndex).getBoundsInLocal());
                 //if the node of this expression was to be in the right position,
                 // then its x coordinate would be the coordinate of the left sibling, the width of the left sibling, the width of this expression's node, and the width of any labels in place for operator symbols
-                final double rightX = leftX + leftWidth + operatorWidth + rightBoundsInScene.getWidth() + operatorWidth;
-
+                final double rightX = leftX + leftWidth + (2 * computeOperatorWidth(currentCase, currentIndex)) + rightBoundsInScene.getWidth();
+                
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
                     Collections.swap(currentCase, currentIndex, rightIndex);
                     p.getChildren().setAll(currentCase);
@@ -208,6 +197,23 @@ public class ExpressionImpl implements Expression {
                 }
             }
         }
+    }
+
+    /**
+     * Computes the width of the JavaFX object that represents an operational sign in the JavaFX node of an expression
+     * @param children children of JavaFX node
+     * @param currentIndex index of the JavaFX node corresponding to this expression withing the children of its parent
+     * @return the width of an operational sign
+     */
+    private double computeOperatorWidth(List<Node> children, int currentIndex) {
+        if (children.size() > 0) {
+            if (currentIndex == 0) {
+                return ((Region)children.get(1)).getWidth();
+            } else {
+                return ((Region)children.get(children.size() - 2)).getWidth();
+            }
+        }
+        return 0;
     }
 
     /**
