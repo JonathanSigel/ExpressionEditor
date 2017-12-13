@@ -175,9 +175,7 @@ public class ExpressionImpl implements Expression {
                 leftWidth = leftBoundsInScene.getWidth();
 
                 if (Math.abs(x - leftX) < Math.abs(x - currentX)) {
-                    Collections.swap(currentCase, currentIndex, leftIndex);
-                    p.getChildren().setAll(currentCase);
-                    //also swaps the expression itself, not just its JavaFX node
+                    swapNodes(p, currentCase, currentIndex, leftIndex);
                     swapSubexpressions(expressionIndex, leftExpressionIndex);
                     return;
                 }
@@ -191,9 +189,7 @@ public class ExpressionImpl implements Expression {
                 final double rightX = leftX + leftWidth + (2 * computeOperatorWidth(currentCase, currentIndex)) + rightBoundsInScene.getWidth();
 
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
-                    Collections.swap(currentCase, currentIndex, rightIndex);
-                    p.getChildren().setAll(currentCase);
-                    //also swaps the expression itself, not just its JavaFX node
+                    swapNodes(p, currentCase, currentIndex, rightIndex);
                     swapSubexpressions(expressionIndex, rightExpressionIndex);
                     return;
                 }
@@ -227,6 +223,18 @@ public class ExpressionImpl implements Expression {
      */
     private void swapSubexpressions(int currentIndex, int swapIndex) {
         Collections.swap(mParent.getSubexpressions(), currentIndex, swapIndex);
+    }
+
+    /**
+     * Switches placement of this expression's JavaFX node in said JavaFX node's parent with the sibling at the given index
+     * @param parent JavaFX parent
+     * @param children list of parent's children
+     * @param currentIndex index of this expression's JavaFX node
+     * @param swapIndex index of sibling to swap with
+     */
+    private void swapNodes(Pane parent, List<Node> children, int currentIndex, int swapIndex) {
+        Collections.swap(children, currentIndex, swapIndex);
+        parent.getChildren().setAll(children);
     }
 
     /**
