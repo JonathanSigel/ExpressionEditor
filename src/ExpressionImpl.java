@@ -138,7 +138,8 @@ public class ExpressionImpl implements Expression {
     }
 
     /**
-     * Switches placement in parent expression with the sibling whose JavaFX node is at the given x coordinate.
+     * Switches placement in parent expression with the sibling who if their JavaFX node was replaced with this expression's JavaFX node,
+     * this expression's JavaFX node's location would then be closest to the given x coordinate.
      * Affects both organization of expression tree and JavaFX nodes
      * @param x the x coordinate
      */

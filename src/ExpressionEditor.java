@@ -67,7 +67,8 @@ public class ExpressionEditor extends Application {
 					mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
 					mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
 					//swaps focused expression accordingly
-					mFocusedExpression.swap(x);
+					Bounds copyBounds = mCopyExpression.getNode().localToScene(mCopyExpression.getNode().getBoundsInLocal());
+					mFocusedExpression.swap(copyBounds.getMinX());
 				}
 			} else if (event.getEventType() == MouseEvent.MOUSE_RELEASED) {
 				//if there is currently no copy, then change focus
