@@ -38,20 +38,32 @@ public class ExpressionEditor extends Application {
 			mCopyExpression = null;
 		}
 
+		/**
+		 * Mouse handle event for manipulating expression.
+		 * Changes focus on mouse release when there is no copy present.
+		 * Creates a copy of focused subexpression on drag and drags it around to change location of focused expression in its parent expression.
+		 * If a copy is present releases it on mouse release.
+		 * @param event the mouse event
+		 */
 		public void handle (MouseEvent event) {
 
+			//coordinates of mouse in scene
 			final double x = event.getSceneX();
 			final double y = event.getSceneY();
 
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
+				//do nothing when mouse is pressed
+				//everything happens on release or drag
+				//because otherwise it is impossible to tell if the user intends to change focus
+				//or create copy on mouse click
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
-				// so long as an expression is currently in focus...
+				//if there is an expression in focus drag its copy
 				if (mFocusedExpression != null) {
-					//if a copy does not exist, built it
+					//if a copy does not exist, create it
 					if (mCopyExpression == null) {
-						buildCopy();
+						copyFocusedExpression();
 					}
-					//drags around copy
+					//drag copy to current location of mouse
 					mCopyExpression.getNode().setTranslateX(mCopyExpression.getNode().getTranslateX() + (x - mLastX));
 					mCopyExpression.getNode().setTranslateY(mCopyExpression.getNode().getTranslateY() + (y - mLastY));
 					//swaps focused expression accordingly
@@ -81,7 +93,7 @@ public class ExpressionEditor extends Application {
 		/**
 		 * Copies the focused expression and puts the copy in the same location as the original
 		 */
-		private void buildCopy() {
+		private void copyFocusedExpression() {
 			mCopyExpression = mFocusedExpression.deepCopy();
 			//ghosts the focused expression
 			mFocusedExpression.setColor(Expression.GHOST_COLOR);

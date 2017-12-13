@@ -187,7 +187,7 @@ public class ExpressionImpl implements Expression {
                 //if the node of this expression was to be in the right position,
                 // then its x coordinate would be the coordinate of the left sibling, the width of the left sibling, the width of this expression's node, and the width of any labels in place for operator symbols
                 final double rightX = leftX + leftWidth + (2 * computeOperatorWidth(currentCase, currentIndex)) + rightBoundsInScene.getWidth();
-                
+
                 if (Math.abs(x - rightX) < Math.abs(x - currentX)) {
                     Collections.swap(currentCase, currentIndex, rightIndex);
                     p.getChildren().setAll(currentCase);
