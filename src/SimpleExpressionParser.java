@@ -1,5 +1,6 @@
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 
 /**
  * Parser following the grammar :
@@ -59,18 +60,18 @@ public class SimpleExpressionParser implements ExpressionParser {
                 if (subExpression2 != null) {
                     CompoundExpression addExpression = new AdditiveExpression();
 
-                    if (withJavaFXControls)
-                        addExpression = new AdditiveExpression(new HBox());
+                    if (withJavaFXControls) {
+                        Pane addNode = new HBox();
+
+                        addNode.getChildren().add(subExpression1.getNode());
+                        addNode.getChildren().add(new Label("+"));
+                        addNode.getChildren().add(subExpression2.getNode());
+
+                        addExpression = new AdditiveExpression(addNode);
+                    }
 
                     addExpression.addSubexpression(subExpression1);
                     addExpression.addSubexpression(subExpression2);
-
-                    //also parses into node
-                    if (withJavaFXControls) {
-                        ((HBox)addExpression.getNode()).getChildren().add(subExpression1.getNode());
-                        ((HBox)addExpression.getNode()).getChildren().add(new Label("+"));
-                        ((HBox)addExpression.getNode()).getChildren().add(subExpression2.getNode());
-                    }
 
                     return addExpression;
                 }
@@ -111,18 +112,18 @@ public class SimpleExpressionParser implements ExpressionParser {
                 if (subExpression2 != null) {
                     CompoundExpression multExpression = new MultiplicativeExpression();
 
-                    if (withJavaFXControls)
-                        multExpression = new MultiplicativeExpression(new HBox());
+                    if (withJavaFXControls) {
+                        Pane multNode = new HBox();
+
+                        multNode.getChildren().add(subExpression1.getNode());
+                        multNode.getChildren().add(new Label("·"));
+                        multNode.getChildren().add(subExpression2.getNode());
+
+                        multExpression = new MultiplicativeExpression(multNode);
+                    }
 
                     multExpression.addSubexpression(subExpression1);
                     multExpression.addSubexpression(subExpression2);
-
-                    //also parses into node
-                    if (withJavaFXControls) {
-                        ((HBox)multExpression.getNode()).getChildren().add(subExpression1.getNode());
-                        ((HBox)multExpression.getNode()).getChildren().add(new Label("·"));
-                        ((HBox)multExpression.getNode()).getChildren().add(subExpression2.getNode());
-                    }
 
                     return multExpression;
                 }
@@ -160,17 +161,17 @@ public class SimpleExpressionParser implements ExpressionParser {
                 if (subExpression != null) {
                     CompoundExpression parenExpression = new ParentheticalExpression();
 
-                    if (withJavaFXControls)
-                        parenExpression = new ParentheticalExpression(new HBox());
+                    if (withJavaFXControls) {
+                        Pane parenNode = new HBox();
+
+                        parenNode.getChildren().add(new Label("("));
+                        parenNode.getChildren().add(subExpression.getNode());
+                        parenNode.getChildren().add(new Label(")"));
+
+                        parenExpression = new ParentheticalExpression(parenNode);
+                    }
 
                     parenExpression.addSubexpression(subExpression);
-
-                    //also parses into node
-                    if (withJavaFXControls) {
-                        ((HBox)parenExpression.getNode()).getChildren().add(new Label("("));
-                        ((HBox)parenExpression.getNode()).getChildren().add(subExpression.getNode());
-                        ((HBox)parenExpression.getNode()).getChildren().add(new Label(")"));
-                    }
 
                     return parenExpression;
                 }
