@@ -187,17 +187,18 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
 
     /**
      * Changes the font of the text in the expression's JavaFX node to given font
+     * All copies made will also posses the same font change
      * @param f the font
      */
     @Override
-    protected void setExpressionFont(Font f) {
+    public void setFont(Font f) {
         mFont = f;
         int index = 0;
         for(Node child : mNode.getChildren()) {
             if (child instanceof Label) {
                 ((Label) child).setFont(f);
             } else {
-                ((ExpressionImpl)mChildren.get(index)).setExpressionFont(f);
+                ((ExpressionImpl)mChildren.get(index)).setFont(f);
                 index++;
             }
         }

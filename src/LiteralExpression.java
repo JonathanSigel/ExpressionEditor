@@ -1,3 +1,4 @@
+import javafx.scene.control.Labeled;
 import javafx.scene.layout.Pane;
 
 public class LiteralExpression extends ExpressionImpl {

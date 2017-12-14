@@ -30,7 +30,7 @@ public class ExpressionImpl implements Expression {
         mParent = null;
         mRep = representation;
         mNode = null;
-        mFont = Font.font("Times", FontPosture.REGULAR, 36);
+        mFont = null;
     }
 
     /**
@@ -43,6 +43,8 @@ public class ExpressionImpl implements Expression {
         mParent = null;
         mRep = representation;
         mNode = nodeRepresentation;
+        //font starts out as default
+        mFont = Font.getDefault();
     }
 
     /**
@@ -268,15 +270,7 @@ public class ExpressionImpl implements Expression {
      */
     public void setFont(Font f) {
         mFont = f;
-        setExpressionFont(f);
-
-    }
-
-    /**
-     * Changes the font of the text in the expression's JavaFX node to given font
-     * @param f the font
-     */
-    protected void setExpressionFont(Font f) {
         ((Labeled)mNode.getChildren().get(0)).setFont(f);
     }
+
 }
