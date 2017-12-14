@@ -97,4 +97,11 @@ interface Expression {
 	 * @param c the given color
 	 */
 	void setColor(Color c);
+
+	/**
+	 * Changes the font of the expression's JavaFX node to given font and size.
+	 *@param font the font to use
+	 *@param size the size of the font to use
+	 */
+	void setExpressionFont(String font, Double size);
 }

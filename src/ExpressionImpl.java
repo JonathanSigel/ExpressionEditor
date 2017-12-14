@@ -11,6 +11,7 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 public class ExpressionImpl implements Expression {
 
@@ -256,5 +257,14 @@ public class ExpressionImpl implements Expression {
      */
     public void setColor(Color c) {
         ((Labeled)mNode.getChildren().get(0)).setTextFill(c);
+    }
+
+    /**
+     * Changes font of the text in the expression's JavaFX node to given color
+     * Should be overridden for compound expressions in order to also change the font of all children's JavaFX nodes
+     * @param c the given color
+     */
+    public void setExpressionFont(String font, Double size) {
+        ((Labeled)mNode.getChildren().get(0)).setFont(Font.font (font, size));
     }
 }

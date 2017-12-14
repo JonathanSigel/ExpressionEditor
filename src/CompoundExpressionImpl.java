@@ -4,6 +4,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.Labeled;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
@@ -179,6 +180,24 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
                 ((Label) child).setTextFill(c);
             } else {
                 mChildren.get(index).setColor(c);
+                index++;
+            }
+        }
+    }
+
+    /**
+     * Changes the font of the text in the expression's JavaFX node to given color
+     * @param font the font to use
+     * @param size the size of the font
+     */
+    @Override
+    public void setExpressionFont(String font, Double size) {
+        int index = 0;
+        for(Node child : mNode.getChildren()) {
+            if (child instanceof Label) {
+                ((Label) child).setFont(Font.font (font, size));
+            } else {
+                mChildren.get(index).setExpressionFont(font, size);
                 index++;
             }
         }
