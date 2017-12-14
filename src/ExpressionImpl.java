@@ -7,11 +7,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.Region;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.List;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontPosture;
 
 public class ExpressionImpl implements Expression {
 
@@ -20,7 +20,7 @@ public class ExpressionImpl implements Expression {
     // is an Pane instead of a Node because it is essential to be able to access its children,
     // and Pane is the highest superclass with that functionality
     protected Pane mNode;
-    protected Color mTextColor;
+    protected Font mFont;
 
     /**
      * Implementation of the Expression Interface. Superclass for all types of expressions.
@@ -30,6 +30,7 @@ public class ExpressionImpl implements Expression {
         mParent = null;
         mRep = representation;
         mNode = null;
+        mFont = Font.font("Times", FontPosture.REGULAR, 36);
     }
 
     /**
@@ -85,6 +86,7 @@ public class ExpressionImpl implements Expression {
         Pane copy = new HBox();
         Labeled oldLabel = (Labeled) mNode.getChildren().get(0);
         Labeled toAdd = new Label((oldLabel).getText());
+        toAdd.setFont(mFont);
         copy.getChildren().add(toAdd);
         return copy;
     }
@@ -260,11 +262,21 @@ public class ExpressionImpl implements Expression {
     }
 
     /**
-     * Changes font of the text in the expression's JavaFX node to given color
-     * Should be overridden for compound expressions in order to also change the font of all children's JavaFX nodes
-     * @param c the given color
+     * Changes the font of the text in the expression's JavaFX node to given font
+     * All copies made will also posses the same font change
+     * @param f the font
      */
-    public void setExpressionFont(String font, Double size) {
-        ((Labeled)mNode.getChildren().get(0)).setFont(Font.font (font, size));
+    public void setFont(Font f) {
+        mFont = f;
+        setExpressionFont(f);
+
+    }
+
+    /**
+     * Changes the font of the text in the expression's JavaFX node to given font
+     * @param f the font
+     */
+    protected void setExpressionFont(Font f) {
+        ((Labeled)mNode.getChildren().get(0)).setFont(f);
     }
 }

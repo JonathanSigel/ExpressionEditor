@@ -124,7 +124,7 @@ public class KiraExpressionEditor extends Application {
                 try {
                     // Success! Add the expression's Node to the expressionPane
                     final Expression expression = expressionParser.parse(textField.getText(), true);
-                    expression.setExpressionFont("Comic Sans MS", 40.0);
+                    //expression.setExpressionFont("Comic Sans MS", 40.0);
                     System.out.println(expression.convertToString(0));
                     expressionPane.getChildren().clear();
                     expressionPane.getChildren().add(expression.getNode());

@@ -1,4 +1,3 @@
-import javafx.collections.FXCollections;
 import javafx.geometry.Bounds;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
@@ -87,6 +86,7 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
             if (child instanceof Label) {
                 //if its a label, create a copy and add to list of children to be added
                 Labeled toAdd = new Label(new String(((Label) child).getText()));
+                toAdd.setFont(mFont);
                 newChildren.add(toAdd);
             } else {
                 //otherwise its an HBox representing an expression, so call this method on the corresponding expression
@@ -186,18 +186,18 @@ public class CompoundExpressionImpl extends ExpressionImpl implements CompoundEx
     }
 
     /**
-     * Changes the font of the text in the expression's JavaFX node to given color
-     * @param font the font to use
-     * @param size the size of the font
+     * Changes the font of the text in the expression's JavaFX node to given font
+     * @param f the font
      */
     @Override
-    public void setExpressionFont(String font, Double size) {
+    protected void setExpressionFont(Font f) {
+        mFont = f;
         int index = 0;
         for(Node child : mNode.getChildren()) {
             if (child instanceof Label) {
-                ((Label) child).setFont(Font.font (font, size));
+                ((Label) child).setFont(f);
             } else {
-                mChildren.get(index).setExpressionFont(font, size);
+                ((ExpressionImpl)mChildren.get(index)).setExpressionFont(f);
                 index++;
             }
         }

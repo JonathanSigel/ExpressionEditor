@@ -11,6 +11,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class ExpressionEditor extends Application {
@@ -145,6 +146,7 @@ public class ExpressionEditor extends Application {
 					System.out.println(expression.convertToString(0));
 					expressionPane.getChildren().clear();
 					expressionPane.getChildren().add(expression.getNode());
+					expression.setFont(Font.font("Comic Sans MS", 26.0));
 					expression.getNode().setLayoutX(WINDOW_WIDTH/4);
 					expression.getNode().setLayoutY(WINDOW_HEIGHT/2);
 

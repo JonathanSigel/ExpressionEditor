@@ -1,6 +1,7 @@
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.Node;
+import javafx.scene.text.Font;
 
 interface Expression {
 	/**
@@ -99,9 +100,9 @@ interface Expression {
 	void setColor(Color c);
 
 	/**
-	 * Changes the font of the expression's JavaFX node to given font and size.
-	 *@param font the font to use
-	 *@param size the size of the font to use
+	 * Changes the font of the text in the expression's JavaFX node to given font
+	 * All copies made will also posses the same font change
+	 * @param f the font
 	 */
-	void setExpressionFont(String font, Double size);
+	void setFont(Font f);
 }
