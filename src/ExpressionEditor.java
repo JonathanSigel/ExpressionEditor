@@ -32,12 +32,16 @@ public class ExpressionEditor extends Application {
 		Expression mCopyExpression;
 		double mLastX;
 		double mLastY;
+		double mClickedX;
+		double mClickedY;
 
 		MouseEventHandler (Pane pane, CompoundExpression rootExpression) {
 			mPane = pane;
 			mRootExpression = rootExpression;
 			mFocusedExpression = null;
 			mCopyExpression = null;
+			mClickedX = 0;
+			mClickedY = 0;
 		}
 
 		/**
@@ -54,10 +58,10 @@ public class ExpressionEditor extends Application {
 			final double y = event.getSceneY();
 
 			if (event.getEventType() == MouseEvent.MOUSE_PRESSED) {
-				//do nothing when mouse is pressed
-				//everything happens on release or drag
-				//because otherwise it is impossible to tell if the user intends to change focus
-				//or create copy on mouse click
+				//used for determining focus
+				mClickedX = x;
+				mClickedY = y;
+
 			} else if (event.getEventType() == MouseEvent.MOUSE_DRAGGED) {
 				//if there is an expression in focus drag its copy
 				if (mFocusedExpression != null) {
@@ -76,10 +80,10 @@ public class ExpressionEditor extends Application {
 				//if there is currently no copy, then change focus
 				if (mCopyExpression == null) {
 					if (mFocusedExpression == null) {
-						mFocusedExpression = mRootExpression.focus(x, y);
+						mFocusedExpression = mRootExpression.focus(mClickedX, mClickedY);
 					} else {
 						((HBox) mFocusedExpression.getNode()).setBorder(Expression.NO_BORDER);
-						mFocusedExpression = mFocusedExpression.focus(x, y);
+						mFocusedExpression = mFocusedExpression.focus(mClickedX, mClickedY);
 					}
 				} else {
 					//if there is a copy, set it down (aka set it to null and remove from pane)
